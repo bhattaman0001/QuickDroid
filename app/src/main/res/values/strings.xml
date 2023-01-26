@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">MovieMagnet</string>
+
+    <string-array name="spinner_options">
+        <item>Video</item>
+        <item>E-books</item>
+        <item>Audio</item>
+        <item>Mobile Apps</item>
+        <item>Archives</item>
+    </string-array>
+
+    <string name="spinner_prompt">Type of query</string>
+
+</resources>
