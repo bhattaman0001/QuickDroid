@@ -2,6 +2,7 @@
     <string name="app_name">MovieMagnet</string>
 
     <string-array name="spinner_options">
+        <item>Type of File</item>
         <item>Video</item>
         <item>E-books</item>
         <item>Audio</item>
@@ -10,5 +11,10 @@
     </string-array>
 
     <string name="spinner_prompt">Type of query</string>
+    <string name="home">Home</string>
+    <string name="share_app">Share App</string>
+    <string name="search_on_web">Search on Web</string>
+    <string name="enter_your_query">Enter your query</string>
+    <string name="find_your_file">Find your File</string>
 
 </resources>
