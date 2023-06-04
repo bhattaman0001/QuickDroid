@@ -1,8 +1,8 @@
 <resources>
-    <string name="app_name">MovieMagnet</string>
+    <string name="app_name">UltimateFetch</string>
 
     <string-array name="spinner_options">
-        <item>Type of File</item>
+        <item>Select file type</item>
         <item>Video</item>
         <item>E-books</item>
         <item>Audio</item>
@@ -14,7 +14,15 @@
     <string name="home">Home</string>
     <string name="share_app">Share App</string>
     <string name="search_on_web">Search on Web</string>
-    <string name="enter_your_query">Enter your query</string>
+    <string name="enter_your_query">Enter your file name</string>
     <string name="find_your_file">Find your File</string>
+    <string name="download_your_file">Download Your File</string>
+    <string name="save_your_file">Save Your File</string>
+    <string name="size_of_file">Size of File</string>
+    <string name="time_ago">Time ago</string>
+    <string name="date_added">Date Added</string>
+    <string name="file_type">File Type</string>
+    <string name="name_of_your_file">Name of your file</string>
+    <string name="text">This application is designed to download any type of file like Video, Anime, Audio, E-Books, Games, ZIP.</string>
 
 </resources>
