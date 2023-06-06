@@ -1,11 +1,14 @@
 package com.example.moviemagnet.ui.activity
 
+import android.Manifest
 import android.content.*
+import android.content.pm.*
 import android.os.*
 import android.view.*
 import android.widget.*
 import androidx.appcompat.app.*
-import com.example.moviemagnet.*
+import androidx.core.content.*
+import com.example.moviemagnet.R
 import com.example.moviemagnet.databinding.*
 import com.google.android.material.snackbar.*
 
@@ -36,16 +39,18 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.findYourFile.setOnClickListener {
-            query_name = binding.queryName.text.toString()
-            /*Log.d("is_this_ok", "query name --> $query_name")*/
-            if (query_name != "") {
-                val intent = Intent(this, FileListActivity::class.java)
-                intent.putExtra("query_name", query_name)
-                intent.putExtra("type_of_single_file_selected", type_of_single_file_selected)
-                startActivity(intent)
-            } else {
-                Snackbar.make(binding.root, "File name must not be empty", Snackbar.LENGTH_SHORT).show()
-            }
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET) == PackageManager.PERMISSION_GRANTED) {
+                query_name = binding.queryName.text.toString()
+                /*Log.d("is_this_ok", "query name --> $query_name")*/
+                if (query_name != "") {
+                    val intent = Intent(this, FileListActivity::class.java)
+                    intent.putExtra("query_name", query_name)
+                    intent.putExtra("type_of_single_file_selected", type_of_single_file_selected)
+                    startActivity(intent)
+                } else {
+                    Snackbar.make(binding.root, "File name must not be empty", Snackbar.LENGTH_SHORT).show()
+                }
+            } else Snackbar.make(view, "Open your Internet", Snackbar.LENGTH_SHORT).show()
         }
     }
 

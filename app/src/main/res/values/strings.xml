@@ -24,5 +24,11 @@
     <string name="file_type">File Type</string>
     <string name="name_of_your_file">Name of your file</string>
     <string name="text">This application is designed to download any type of file like Video, Anime, Audio, E-Books, Games, ZIP.</string>
+    <string name="go_to_home">Go To Home</string>
+    <string name="see_saved_files">See Saved Files</string>
+    <string name="cancel">Cancel</string>
+    <string name="_1">1</string>
+    <string name="response_time">Response Time</string>
+    <string name="total_number_of_results">Total number of results</string>
 
 </resources>

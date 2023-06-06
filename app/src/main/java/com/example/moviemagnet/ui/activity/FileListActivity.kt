@@ -1,18 +1,19 @@
 package com.example.moviemagnet.ui.activity
 
-import android.*
-import android.content.pm.*
+import android.annotation.*
+import android.content.*
 import android.os.*
 import android.view.*
 import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
+import android.widget.*
 import androidx.appcompat.app.*
-import androidx.core.content.*
 import androidx.recyclerview.widget.*
-import com.example.moviemagnet.Constants.Constants.header1
-import com.example.moviemagnet.Constants.Constants.header2
+import com.example.moviemagnet.*
 import com.example.moviemagnet.adapter.*
 import com.example.moviemagnet.api.*
 import com.example.moviemagnet.databinding.*
+import com.google.android.material.bottomsheet.*
 import com.google.android.material.snackbar.*
 import kotlinx.coroutines.*
 
@@ -36,35 +37,83 @@ class FileListActivity : AppCompatActivity() {
             /*Log.d("is_this_ok", "query_name --> $query_name | type_of_query --> $type_of_single_file_selected")*/
         }
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET) == PackageManager.PERMISSION_GRANTED) {
-            CoroutineScope(Dispatchers.IO).launch {
-                try {
-                    val response = RetrofitHelper.response_api_interface.getData(
-                        header1 = header1,
-                        header2 = header2,
-                        parameter1 = query_name,
-                        parameter2 = type_of_single_file_selected
-                    )
-                    /*Log.d("is_this_ok", "response is --> $response | response success --> ${response.isSuccessful}")*/
-                    Snackbar.make(view, "Response is ${response.body()?.status}", Snackbar.LENGTH_SHORT).show()
-                    if (response.isSuccessful) {
-                        val data = response.body()?.files_found
-                        recyclerView.layoutManager = LinearLayoutManager(this@FileListActivity)
-                        adapter = FileResponseAdapter(data, this@FileListActivity)
-                        recyclerView.adapter = adapter
-                        /*Log.d("is_this_ok", "data size --> ${data?.size}")
-                        Log.d("is_this_ok", "data  --> $data")*/
-                    } else {
-                        /*Log.d("is_this_ok", "response is failed")*/
-                        Snackbar.make(view, "The response is failed", Snackbar.LENGTH_SHORT).show()
-                    }
-                    binding.progressBar.visibility = INVISIBLE
-                } catch (e: Exception) {
-                    /*Log.d("is_this_ok", "exception is --> ${e.message}\n${e.localizedMessage}")*/
-                    Snackbar.make(view, "The exception is --> ${e.message}", Snackbar.LENGTH_SHORT).show()
-                    e.printStackTrace()
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = RetrofitHelper.response_api_interface.getData(
+                    header1 = BuildConfig.header1,
+                    header2 = BuildConfig.header2,
+                    parameter1 = query_name,
+                    parameter2 = type_of_single_file_selected
+                )
+
+                val responseTime = (response.raw().receivedResponseAtMillis - response.raw().sentRequestAtMillis).toDouble() / 1000.0
+                binding.responseTime.text = "Your request took $responseTime seconds to find and display! Thanks"
+
+                /*Log.d("is_this_ok", "response is --> $response | response success --> ${response.isSuccessful}")*/
+                Snackbar.make(view, "Response is ${response.body()?.status}", Snackbar.LENGTH_SHORT).show()
+                if (response.isSuccessful) {
+                    val data = response.body()?.files_found
+                    binding.numberOfResults.text = "Total results : " + data?.size.toString()
+                    recyclerView.layoutManager = LinearLayoutManager(this@FileListActivity)
+                    adapter = FileResponseAdapter(data, this@FileListActivity)
+                    recyclerView.adapter = adapter
+                    /*Log.d("is_this_ok", "data size --> ${data?.size}")
+                    Log.d("is_this_ok", "data  --> $data")*/
+                } else {
+                    /*Log.d("is_this_ok", "response is failed")*/
+                    Snackbar.make(view, "The response is failed", Snackbar.LENGTH_SHORT).show()
                 }
+                binding.progressBar.visibility = INVISIBLE
+                binding.responseTime.visibility = VISIBLE
+                binding.numberOfResults.visibility = VISIBLE
+            } catch (e: Exception) {
+                /*Log.d("is_this_ok", "exception is --> ${e.message}\n${e.localizedMessage}")*/
+                Snackbar.make(view, "The exception is --> ${e.message}", Snackbar.LENGTH_SHORT).show()
+                e.printStackTrace()
             }
-        } else Snackbar.make(view, "Open your Internet", Snackbar.LENGTH_SHORT).show()
+        }
+    }
+
+    @SuppressLint("ResourceType")
+    @Deprecated("Deprecated in Java")
+    override fun onBackPressed() {
+        val dialog = BottomSheetDialog(this, R.style.BottomDialog)
+        val inflate: View = LayoutInflater.from(this).inflate(R.layout.bottom_sheet_layout, null)
+        dialog.setContentView(inflate)
+        val layoutParams: ViewGroup.LayoutParams = inflate.layoutParams
+        layoutParams.width = this.resources.displayMetrics.widthPixels
+        inflate.layoutParams = layoutParams
+        dialog.window!!.setGravity(80)
+        dialog.setCanceledOnTouchOutside(true)
+        dialog.window!!.setWindowAnimations(2131886298)
+        dialog.show()
+
+        inflate.findViewById<TextView>(R.id.go_to_home)?.setOnClickListener {
+            dialog.dismiss()
+            val intent = Intent(this, MainActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+            startActivity(intent)
+            finishAffinity()
+        }
+
+        inflate.findViewById<TextView>(R.id.see_saved_files)?.setOnClickListener {
+            dialog.dismiss()
+            val intent = Intent(this, SavedFilesActivity::class.java)
+            startActivity(intent)
+        }
+
+        inflate.findViewById<TextView>(R.id.cancel_bottom_sheet)?.setOnClickListener {
+            dialog.dismiss()
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                onBackPressed()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

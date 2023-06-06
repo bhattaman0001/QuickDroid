@@ -19,6 +19,8 @@ class FileResponseAdapter(private val data: MutableList<ResponseModel>?, private
         var time_ago: TextView = itemView.findViewById(R.id.time_ago),
         var file_size: TextView = itemView.findViewById(R.id.file_size),
         var download_link: Button = itemView.findViewById(R.id.download_link),
+        var number_id: TextView = itemView.findViewById(R.id.number_id),
+        var save_your_file: Button = itemView.findViewById(R.id.save_your_file),
     ) : RecyclerView.ViewHolder(itemView)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FileResponseAdapter.ViewHolder {
@@ -39,6 +41,10 @@ class FileResponseAdapter(private val data: MutableList<ResponseModel>?, private
                 val intent = Intent(Intent.ACTION_VIEW)
                 intent.data = Uri.parse(url)
                 context.startActivity(intent)
+            }
+            holder.number_id.text = "${position + 1}"
+            holder.save_your_file.setOnClickListener {
+                Toast.makeText(context, "Coming soon", Toast.LENGTH_SHORT).show()
             }
         }
     }
