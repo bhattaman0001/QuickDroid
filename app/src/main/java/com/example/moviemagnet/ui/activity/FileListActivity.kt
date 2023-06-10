@@ -3,16 +3,20 @@ package com.example.moviemagnet.ui.activity
 import android.annotation.*
 import android.content.*
 import android.os.*
+import android.util.*
 import android.view.*
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.widget.*
 import androidx.appcompat.app.*
+import androidx.lifecycle.*
 import androidx.recyclerview.widget.*
 import com.example.moviemagnet.*
 import com.example.moviemagnet.adapter.*
 import com.example.moviemagnet.api.*
 import com.example.moviemagnet.databinding.*
+import com.example.moviemagnet.db.*
+import com.example.moviemagnet.util.*
 import com.google.android.material.bottomsheet.*
 import com.google.android.material.snackbar.*
 import kotlinx.coroutines.*
@@ -22,7 +26,7 @@ class FileListActivity : AppCompatActivity() {
     private lateinit var binding: ActivityFileListBinding
     var type_of_single_file_selected: String = ""
     var query_name: String = ""
-    private lateinit var recyclerView: RecyclerView
+    private lateinit var recyclerViewFileList: RecyclerView
     private lateinit var adapter: FileResponseAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,7 +34,7 @@ class FileListActivity : AppCompatActivity() {
         binding = ActivityFileListBinding.inflate(layoutInflater)
         val view: View = binding.root
         setContentView(view)
-        recyclerView = binding.fileListRv
+        recyclerViewFileList = binding.fileListRv
         if (intent.extras != null) {
             query_name = intent.getStringExtra("query_name").toString()
             type_of_single_file_selected = intent.getStringExtra("type_of_single_file_selected").toString()
@@ -54,9 +58,9 @@ class FileListActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     val data = response.body()?.files_found
                     binding.numberOfResults.text = "Total results : " + data?.size.toString()
-                    recyclerView.layoutManager = LinearLayoutManager(this@FileListActivity)
-                    adapter = FileResponseAdapter(data, this@FileListActivity)
-                    recyclerView.adapter = adapter
+                    recyclerViewFileList.layoutManager = LinearLayoutManager(this@FileListActivity)
+                    adapter = FileResponseAdapter(data?.distinct(), this@FileListActivity)
+                    recyclerViewFileList.adapter = adapter
                     /*Log.d("is_this_ok", "data size --> ${data?.size}")
                     Log.d("is_this_ok", "data  --> $data")*/
                 } else {
@@ -107,13 +111,48 @@ class FileListActivity : AppCompatActivity() {
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.drawer_menu, menu)
+        return true
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
+
             android.R.id.home -> {
                 onBackPressed()
                 return true
             }
+
+            R.id.nav_home -> {
+                val intent = Intent(this, MainActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+                startActivity(intent)
+                finishAffinity()
+                return true
+            }
+
+            R.id.nav_share_app -> {
+                Util.showComingSoonToast(this@FileListActivity)
+                return true
+            }
+
+            R.id.nav_search_web -> {
+                Util.showComingSoonToast(this@FileListActivity)
+                return true
+            }
+
+            R.id.go_to_saved_file -> {
+                val intent = Intent(this, SavedFilesActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
+                return true
+            }
+
+            else -> {
+                return super.onOptionsItemSelected(item)
+            }
         }
-        return super.onOptionsItemSelected(item)
     }
+
 }

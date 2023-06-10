@@ -18,6 +18,7 @@
     <string name="find_your_file">Find your File</string>
     <string name="download_your_file">Download Your File</string>
     <string name="save_your_file">Save Your File</string>
+    <string name="delete_your_file">Delete</string>
     <string name="size_of_file">Size of File</string>
     <string name="time_ago">Time ago</string>
     <string name="date_added">Date Added</string>
@@ -30,5 +31,7 @@
     <string name="_1">1</string>
     <string name="response_time">Response Time</string>
     <string name="total_number_of_results">Total number of results</string>
+    <string name="no_saved_file">No Saved File</string>
+    <string name="delete_saved_files">Delete Saved Files</string>
 
 </resources>

@@ -1,6 +1,6 @@
 package com.example.moviemagnet.api
 
-import com.example.moviemagnet.Constants.Constants.BASE_URL
+import com.example.moviemagnet.util.Util.BASE_URL
 import okhttp3.*
 import okhttp3.logging.*
 import retrofit2.*

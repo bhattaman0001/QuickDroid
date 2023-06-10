@@ -16,4 +16,9 @@
         android:icon="@drawable/outline_manage_search_24"
         android:title="@string/search_on_web" />
 
+    <item
+        android:id="@+id/go_to_saved_file"
+        android:icon="@drawable/saved_file"
+        android:title="@string/see_saved_files" />
+
 </menu>

@@ -10,6 +10,7 @@ import androidx.appcompat.app.*
 import androidx.core.content.*
 import com.example.moviemagnet.R
 import com.example.moviemagnet.databinding.*
+import com.example.moviemagnet.util.*
 import com.google.android.material.snackbar.*
 
 class MainActivity : AppCompatActivity() {
@@ -18,6 +19,7 @@ class MainActivity : AppCompatActivity() {
     var type_of_file_array: Array<String> = emptyArray()
     var type_of_single_file_selected: String = ""
     var query_name: String = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -51,6 +53,41 @@ class MainActivity : AppCompatActivity() {
                     Snackbar.make(binding.root, "File name must not be empty", Snackbar.LENGTH_SHORT).show()
                 }
             } else Snackbar.make(view, "Open your Internet", Snackbar.LENGTH_SHORT).show()
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.drawer_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.nav_home -> {
+                closeOptionsMenu()
+                return true
+            }
+
+            R.id.nav_share_app -> {
+                Util.showComingSoonToast(this@MainActivity)
+                return true
+            }
+
+            R.id.nav_search_web -> {
+                Util.showComingSoonToast(this@MainActivity)
+                return true
+            }
+
+            R.id.go_to_saved_file -> {
+                val intent = Intent(this, SavedFilesActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
+                return true
+            }
+
+            else -> {
+                return super.onOptionsItemSelected(item)
+            }
         }
     }
 
