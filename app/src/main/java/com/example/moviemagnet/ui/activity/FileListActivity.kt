@@ -52,12 +52,14 @@ class FileListActivity : AppCompatActivity() {
 
                 val responseTime = (response.raw().receivedResponseAtMillis - response.raw().sentRequestAtMillis).toDouble() / 1000.0
                 binding.responseTime.text = "Your request took $responseTime seconds to find and display! Thanks"
+                binding.responseTime.isAllCaps = true
 
                 /*Log.d("is_this_ok", "response is --> $response | response success --> ${response.isSuccessful}")*/
                 Snackbar.make(view, "Response is ${response.body()?.status}", Snackbar.LENGTH_SHORT).show()
                 if (response.isSuccessful) {
                     val data = response.body()?.files_found
                     binding.numberOfResults.text = "Total results : " + data?.size.toString()
+                    binding.numberOfResults.isAllCaps = true
                     recyclerViewFileList.layoutManager = LinearLayoutManager(this@FileListActivity)
                     adapter = FileResponseAdapter(data?.distinct(), this@FileListActivity)
                     recyclerViewFileList.adapter = adapter

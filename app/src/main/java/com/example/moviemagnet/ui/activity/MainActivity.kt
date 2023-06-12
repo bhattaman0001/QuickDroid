@@ -3,6 +3,7 @@ package com.example.moviemagnet.ui.activity
 import android.Manifest
 import android.content.*
 import android.content.pm.*
+import android.net.*
 import android.os.*
 import android.view.*
 import android.widget.*
@@ -12,6 +13,7 @@ import com.example.moviemagnet.R
 import com.example.moviemagnet.databinding.*
 import com.example.moviemagnet.util.*
 import com.google.android.material.snackbar.*
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -52,6 +54,19 @@ class MainActivity : AppCompatActivity() {
                 } else {
                     Snackbar.make(binding.root, "File name must not be empty", Snackbar.LENGTH_SHORT).show()
                 }
+                /*val searchQuery = query_name // Replace with the user-provided query
+                try {
+                    val intent = Intent(Intent.ACTION_VIEW)
+                    intent.data = Uri.parse("https://t.me/search?q=$searchQuery")
+
+                    // Set the package name explicitly to ensure Telegram is used to handle the intent
+                    intent.setPackage("org.telegram.messenger")
+                    startActivity(intent)
+                } catch (e: ActivityNotFoundException) {
+                    // Telegram is not installed, handle this situation
+                    Toast.makeText(applicationContext, "Telegram is not installed", Toast.LENGTH_SHORT).show()
+                }*/
+
             } else Snackbar.make(view, "Open your Internet", Snackbar.LENGTH_SHORT).show()
         }
     }

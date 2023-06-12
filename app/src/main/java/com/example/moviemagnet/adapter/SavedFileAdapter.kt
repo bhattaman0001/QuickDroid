@@ -40,6 +40,10 @@ class SavedFileAdapter(private val fileData: LiveData<List<ResponseModel>>, priv
         var number_id: TextView = itemView.findViewById(R.id.number_id),
         var save_your_file: Button = itemView.findViewById(R.id.save_your_file),
         var delete_your_file: Button = itemView.findViewById(R.id.delete_your_file),
+        var ultimate_share: ImageView = itemView.findViewById(R.id.share_file),
+        var whatsapp_share: ImageView = itemView.findViewById(R.id.whatsapp_share),
+        var instagram_share: ImageView = itemView.findViewById(R.id.instagram_share),
+        var telegram_share: ImageView = itemView.findViewById(R.id.telegram_share),
     ) : RecyclerView.ViewHolder(itemView)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SavedFileAdapter.ViewHolder {
@@ -54,8 +58,8 @@ class SavedFileAdapter(private val fileData: LiveData<List<ResponseModel>>, priv
         holder.time_ago.text = file.time_ago
         holder.date_added.text = file.date_added
         holder.file_size.text = file.file_size
+        val url = file.file_link
         holder.download_link.setOnClickListener {
-            val url = file.file_link
             val intent = Intent(Intent.ACTION_VIEW)
             intent.data = Uri.parse(url)
             context.startActivity(intent)
@@ -65,6 +69,45 @@ class SavedFileAdapter(private val fileData: LiveData<List<ResponseModel>>, priv
         holder.delete_your_file.setOnClickListener {
             onDeleteClickListener.onDeleteClick(file)
             Util.showDeleteToast(context)
+        }
+        holder.ultimate_share.setOnClickListener {
+            val shareIntent = Intent(Intent.ACTION_SEND)
+            shareIntent.type = "text/plain"
+            shareIntent.putExtra(Intent.EXTRA_TEXT, Util.message + url)
+            context.startActivity(Intent.createChooser(shareIntent, "Share via"))
+        }
+        holder.whatsapp_share.setOnClickListener {
+            val shareIntent = Intent(Intent.ACTION_SEND)
+            shareIntent.type = "text/plain"
+            shareIntent.setPackage("com.whatsapp")
+            shareIntent.putExtra(Intent.EXTRA_TEXT, Util.message + url)
+            try {
+                context.startActivity(shareIntent)
+            } catch (ex: ActivityNotFoundException) {
+                Toast.makeText(context, "Whatsapp is not installed", Toast.LENGTH_SHORT).show()
+            }
+        }
+        holder.instagram_share.setOnClickListener {
+            val shareIntent = Intent(Intent.ACTION_SEND)
+            shareIntent.type = "text/plain"
+            shareIntent.putExtra(Intent.EXTRA_TEXT, Util.message + url)
+            shareIntent.setPackage("com.instagram.android")
+            try {
+                context.startActivity(shareIntent)
+            } catch (ex: ActivityNotFoundException) {
+                Toast.makeText(context, "Instagram is not installed", Toast.LENGTH_SHORT).show()
+            }
+        }
+        holder.telegram_share.setOnClickListener {
+            val shareIntent = Intent(Intent.ACTION_SEND)
+            shareIntent.type = "text/plain"
+            shareIntent.putExtra(Intent.EXTRA_TEXT, Util.message + url)
+            shareIntent.setPackage("org.telegram.messenger")
+            try {
+                context.startActivity(shareIntent)
+            } catch (ex: ActivityNotFoundException) {
+                Toast.makeText(context, "Telegram is not installed", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 

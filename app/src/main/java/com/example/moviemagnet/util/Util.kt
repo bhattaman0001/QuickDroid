@@ -4,11 +4,11 @@ import android.content.*
 import android.widget.*
 import com.example.moviemagnet.db.*
 import com.example.moviemagnet.model.*
-import com.example.moviemagnet.ui.activity.*
 import kotlinx.coroutines.*
 
 object Util {
     const val BASE_URL = "https://filepursuit.p.rapidapi.com/"
+    const val message = "Thanks for using our application, below is the link of the file that you are trying to send to this beautiful person\n\n"
 
     fun saveFile(file: ResponseModel, context: Context) = CoroutineScope(Dispatchers.IO).launch {
         SavedFileRoomDatabase.invoke(context).getFileDaa().insertFile(file)
