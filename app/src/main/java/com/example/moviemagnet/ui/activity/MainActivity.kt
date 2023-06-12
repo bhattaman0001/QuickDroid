@@ -3,7 +3,6 @@ package com.example.moviemagnet.ui.activity
 import android.Manifest
 import android.content.*
 import android.content.pm.*
-import android.net.*
 import android.os.*
 import android.view.*
 import android.widget.*
@@ -11,6 +10,7 @@ import androidx.appcompat.app.*
 import androidx.core.content.*
 import com.example.moviemagnet.R
 import com.example.moviemagnet.databinding.*
+import com.example.moviemagnet.model.*
 import com.example.moviemagnet.util.*
 import com.google.android.material.snackbar.*
 
@@ -47,6 +47,8 @@ class MainActivity : AppCompatActivity() {
                 query_name = binding.queryName.text.toString()
                 /*Log.d("is_this_ok", "query name --> $query_name")*/
                 if (query_name != "") {
+                    val history = HistoryModel(query_name, type_of_single_file_selected)
+                    Util.insertOrUpdateHistory(history, this@MainActivity)
                     val intent = Intent(this, FileListActivity::class.java)
                     intent.putExtra("query_name", query_name)
                     intent.putExtra("type_of_single_file_selected", type_of_single_file_selected)
@@ -95,6 +97,13 @@ class MainActivity : AppCompatActivity() {
 
             R.id.go_to_saved_file -> {
                 val intent = Intent(this, SavedFilesActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
+                return true
+            }
+
+            R.id.go_to_history -> {
+                val intent = Intent(this, HistoryActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)
                 return true

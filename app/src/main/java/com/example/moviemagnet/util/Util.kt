@@ -18,6 +18,10 @@ object Util {
         SavedFileRoomDatabase(context).getFileDaa().insertOrUpdate(file)
     }
 
+    fun insertOrUpdateHistory(history: HistoryModel, context: Context) = CoroutineScope(Dispatchers.IO).launch {
+        HistoryDatabase(context).getHistoryDao().insertOrUpdate(history)
+    }
+
     fun updateFile(file: ResponseModel, context: Context) = CoroutineScope(Dispatchers.IO).launch {
         SavedFileRoomDatabase.invoke(context).getFileDaa().updateFile(file)
     }

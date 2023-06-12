@@ -14,13 +14,18 @@
         android:theme="@style/Theme.MovieMagnet"
         tools:targetApi="31">
         <activity
+            android:name=".ui.activity.HistoryActivity"
+            android:exported="false"
+            android:label="History"
+            android:parentActivityName=".ui.activity.MainActivity" />
+        <activity
             android:name=".ui.activity.SavedFilesActivity"
-            android:label="Saved Files"
-            android:exported="false" />
+            android:exported="false"
+            android:label="Saved Files" />
         <activity
             android:name=".ui.activity.FileListActivity"
-            android:label="Found Files"
             android:exported="false"
+            android:label="Found Files"
             android:parentActivityName=".ui.activity.MainActivity" />
         <activity
             android:name=".ui.activity.MainActivity"

@@ -21,4 +21,9 @@
         android:icon="@drawable/saved_file"
         android:title="@string/see_saved_files" />
 
+    <item
+        android:id="@+id/go_to_history"
+        android:icon="@drawable/history_icon"
+        android:title="@string/history" />
+
 </menu>

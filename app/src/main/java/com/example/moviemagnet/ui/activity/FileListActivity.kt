@@ -16,6 +16,7 @@ import com.example.moviemagnet.adapter.*
 import com.example.moviemagnet.api.*
 import com.example.moviemagnet.databinding.*
 import com.example.moviemagnet.db.*
+import com.example.moviemagnet.model.*
 import com.example.moviemagnet.util.*
 import com.google.android.material.bottomsheet.*
 import com.google.android.material.snackbar.*
@@ -72,9 +73,10 @@ class FileListActivity : AppCompatActivity() {
                 binding.progressBar.visibility = INVISIBLE
                 binding.responseTime.visibility = VISIBLE
                 binding.numberOfResults.visibility = VISIBLE
+                binding.divider.visibility = VISIBLE
             } catch (e: Exception) {
                 /*Log.d("is_this_ok", "exception is --> ${e.message}\n${e.localizedMessage}")*/
-                Snackbar.make(view, "The exception is --> ${e.message}", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(view, "Open your Internet", Snackbar.LENGTH_LONG).show()
                 e.printStackTrace()
             }
         }
@@ -115,6 +117,8 @@ class FileListActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.drawer_menu, menu)
+        val item = menu?.findItem(R.id.go_to_history)
+        item?.isVisible = false
         return true
     }
 
