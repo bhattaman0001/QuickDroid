@@ -2,13 +2,15 @@ package com.example.moviemagnet.util
 
 import android.content.*
 import android.widget.*
-import com.example.moviemagnet.db.*
+import com.example.moviemagnet.database.*
 import com.example.moviemagnet.model.*
 import kotlinx.coroutines.*
 
 object Util {
     const val BASE_URL = "https://filepursuit.p.rapidapi.com/"
     const val message = "Thanks for using our application, below is the link of the file that you are trying to send to this beautiful person\n\n"
+
+    /*https://medium.com/acmvit/getting-started-with-lottie-animations-android-2c225ad2c467*/
 
     fun saveFile(file: ResponseModel, context: Context) = CoroutineScope(Dispatchers.IO).launch {
         SavedFileRoomDatabase.invoke(context).getFileDaa().insertFile(file)
@@ -26,8 +28,12 @@ object Util {
         SavedFileRoomDatabase.invoke(context).getFileDaa().updateFile(file)
     }
 
-    fun deleteAllFile(context: Context) = CoroutineScope(Dispatchers.IO).launch {
+    fun deleteAllSavedFile(context: Context) = CoroutineScope(Dispatchers.IO).launch {
         SavedFileRoomDatabase(context).clearAllTables()
+    }
+
+    fun deleteAllHistory(context: Context) = CoroutineScope(Dispatchers.IO).launch {
+        HistoryDatabase(context).clearAllTables()
     }
 
     fun deleteFile(context: Context, file: ResponseModel) = CoroutineScope(Dispatchers.IO).launch {

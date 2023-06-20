@@ -23,6 +23,19 @@ class HistoryAdapter(history: LiveData<List<HistoryModel>>, private val context:
         }
     }
 
+    fun deleteItem(position: Int) {
+        // Remove the item from the data source and notify the adapter
+        val deletedItem = fileHistory.removeAt(position)
+        notifyItemRemoved(position)
+
+        Snackbar.make(binding.root, "Successfully Deleted article", Snackbar.LENGTH_SHORT).apply {
+            setAction("Undo") {
+
+            }
+            show()
+        }
+    }
+
     inner class ViewHolder(private val binding: HistoryItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(history: HistoryModel) {
             binding.historyTxt.text = history.queryName

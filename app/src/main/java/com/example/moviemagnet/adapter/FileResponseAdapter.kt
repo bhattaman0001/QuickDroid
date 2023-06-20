@@ -10,10 +10,13 @@ import androidx.recyclerview.widget.*
 import com.example.moviemagnet.*
 import com.example.moviemagnet.databinding.*
 import com.example.moviemagnet.model.*
+import com.example.moviemagnet.repository.*
 import com.example.moviemagnet.util.*
+import kotlinx.coroutines.*
 
 
-class FileResponseAdapter(private val data: List<ResponseModel>?, private val context: Context) : RecyclerView.Adapter<FileResponseAdapter.ViewHolder>() {
+class FileResponseAdapter(private val data: List<ResponseModel>?, private val context: Context, private val repository: Repository) :
+    RecyclerView.Adapter<FileResponseAdapter.ViewHolder>() {
 
     private lateinit var binding: FileItemBinding
 
@@ -32,7 +35,9 @@ class FileResponseAdapter(private val data: List<ResponseModel>?, private val co
             }
             binding.numberId.text = "${position + 1}"
             binding.saveYourFile.setOnClickListener {
-                response?.let { it1 -> Util.insertOrUpdate(it1, context) }
+                CoroutineScope(Dispatchers.IO).launch {
+                    response?.let { it1 -> repository.responseInsertOrUpdate(it1) }
+                }
                 binding.saveYourFile.text = "Saved"
                 binding.saveYourFile.background.setTint(context.resources.getColor(android.R.color.holo_green_light))
                 binding.saveYourFile.setTextColor(context.resources.getColor(R.color.black))

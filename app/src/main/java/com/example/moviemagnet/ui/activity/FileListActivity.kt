@@ -14,9 +14,10 @@ import androidx.recyclerview.widget.*
 import com.example.moviemagnet.*
 import com.example.moviemagnet.adapter.*
 import com.example.moviemagnet.api.*
+import com.example.moviemagnet.database.*
 import com.example.moviemagnet.databinding.*
-import com.example.moviemagnet.db.*
 import com.example.moviemagnet.model.*
+import com.example.moviemagnet.repository.*
 import com.example.moviemagnet.util.*
 import com.google.android.material.bottomsheet.*
 import com.google.android.material.snackbar.*
@@ -29,6 +30,7 @@ class FileListActivity : AppCompatActivity() {
     var query_name: String = ""
     private lateinit var recyclerViewFileList: RecyclerView
     private lateinit var adapter: FileResponseAdapter
+    private lateinit var repository: Repository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +43,8 @@ class FileListActivity : AppCompatActivity() {
             type_of_single_file_selected = intent.getStringExtra("type_of_single_file_selected").toString()
             /*Log.d("is_this_ok", "query_name --> $query_name | type_of_query --> $type_of_single_file_selected")*/
         }
+
+        val history = HistoryModel(query_name, type_of_single_file_selected)
 
         CoroutineScope(Dispatchers.IO).launch {
             try {
@@ -62,7 +66,14 @@ class FileListActivity : AppCompatActivity() {
                     binding.numberOfResults.text = "Total results : " + data?.size.toString()
                     binding.numberOfResults.isAllCaps = true
                     recyclerViewFileList.layoutManager = LinearLayoutManager(this@FileListActivity)
-                    adapter = FileResponseAdapter(data?.distinct(), this@FileListActivity)
+
+                    repository = Repository(SavedFileRoomDatabase(this@FileListActivity))
+                    adapter = FileResponseAdapter(data?.distinct(), this@FileListActivity, repository)
+
+                    // if the response is success then insert it into history db
+                    repository = Repository(HistoryDatabase(this@FileListActivity))
+                    repository.historyInsertOrUpdate(history)
+
                     recyclerViewFileList.adapter = adapter
                     /*Log.d("is_this_ok", "data size --> ${data?.size}")
                     Log.d("is_this_ok", "data  --> $data")*/

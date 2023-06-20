@@ -7,7 +7,7 @@
         android:title="@string/home" />
 
     <item
-        android:id="@+id/delete_db_entries"
+        android:id="@+id/clear_all"
         android:icon="@drawable/delete_db_entries"
         android:title="@string/delete_saved_files" />
 

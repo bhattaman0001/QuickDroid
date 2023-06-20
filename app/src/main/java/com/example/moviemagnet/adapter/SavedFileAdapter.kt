@@ -37,7 +37,7 @@ class SavedFileAdapter(fileData: LiveData<List<ResponseModel>>, private val cont
             binding.fileType.text = file.file_type
             binding.timeAgo.text = file.time_ago
             binding.dateAdded.text = file.date_added
-            binding.fileSize.text = file.file_size
+            binding.fileSize.text = if (file.file_size != "") file.file_size else "No Size"
             val url = file.file_link
             binding.downloadLink.setOnClickListener {
                 val intent = Intent(Intent.ACTION_VIEW)

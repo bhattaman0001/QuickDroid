@@ -10,22 +10,26 @@ import androidx.appcompat.app.*
 import androidx.recyclerview.widget.*
 import com.example.moviemagnet.*
 import com.example.moviemagnet.adapter.*
+import com.example.moviemagnet.database.*
 import com.example.moviemagnet.databinding.*
-import com.example.moviemagnet.db.*
 import com.example.moviemagnet.model.*
+import com.example.moviemagnet.repository.*
 import com.example.moviemagnet.util.*
+import kotlinx.coroutines.*
 
 class SavedFilesActivity : AppCompatActivity(), SavedFileAdapter.OnDeleteClickListener {
     private lateinit var binding: ActivitySavedFilesBinding
     private lateinit var recyclerView: RecyclerView
     private lateinit var savedFileAdapter: SavedFileAdapter
+    private lateinit var repository: Repository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySavedFilesBinding.inflate(layoutInflater)
         val view: View = binding.root
         setContentView(view)
-        val fileLiveData = SavedFileRoomDatabase(this).getFileDaa().getAllFile()
+        repository = Repository(SavedFileRoomDatabase(this))
+        val fileLiveData = repository.responseGetAllFile()
         recyclerView = binding.rvSavedFile
         fileLiveData.observe(this) {
             if (it.isNullOrEmpty()) {
@@ -56,8 +60,8 @@ class SavedFilesActivity : AppCompatActivity(), SavedFileAdapter.OnDeleteClickLi
                 return true
             }
 
-            R.id.delete_db_entries -> {
-                Util.deleteAllFile(this@SavedFilesActivity)
+            R.id.clear_all -> {
+                Util.deleteAllSavedFile(this@SavedFilesActivity)
                 Toast.makeText(this, "Delete all saved files successfully", Toast.LENGTH_SHORT).show()
                 return true
             }
@@ -69,6 +73,8 @@ class SavedFilesActivity : AppCompatActivity(), SavedFileAdapter.OnDeleteClickLi
     }
 
     override fun onDeleteClick(file: ResponseModel) {
-        Util.deleteFile(this@SavedFilesActivity, file)
+        CoroutineScope(Dispatchers.IO).launch {
+            repository.responseDeleteFile(file)
+        }
     }
 }

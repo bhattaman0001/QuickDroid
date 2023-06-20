@@ -9,10 +9,13 @@ import android.widget.*
 import androidx.appcompat.app.*
 import androidx.core.content.*
 import com.example.moviemagnet.R
+import com.example.moviemagnet.database.*
 import com.example.moviemagnet.databinding.*
 import com.example.moviemagnet.model.*
+import com.example.moviemagnet.repository.*
 import com.example.moviemagnet.util.*
 import com.google.android.material.snackbar.*
+import kotlinx.coroutines.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -21,12 +24,14 @@ class MainActivity : AppCompatActivity() {
     var type_of_file_array: Array<String> = emptyArray()
     var type_of_single_file_selected: String = ""
     var query_name: String = ""
+    private lateinit var repository: Repository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view: View = binding.root
         setContentView(view)
+        repository = Repository(HistoryDatabase(this))
         type_of_file_array = resources.getStringArray(R.array.spinner_options)
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, type_of_file_array)
         binding.typeOfFile.adapter = adapter
@@ -47,8 +52,6 @@ class MainActivity : AppCompatActivity() {
                 query_name = binding.queryName.text.toString()
                 /*Log.d("is_this_ok", "query name --> $query_name")*/
                 if (query_name != "") {
-                    val history = HistoryModel(query_name, type_of_single_file_selected)
-                    Util.insertOrUpdateHistory(history, this@MainActivity)
                     val intent = Intent(this, FileListActivity::class.java)
                     intent.putExtra("query_name", query_name)
                     intent.putExtra("type_of_single_file_selected", type_of_single_file_selected)
@@ -56,6 +59,7 @@ class MainActivity : AppCompatActivity() {
                 } else {
                     Snackbar.make(binding.root, "File name must not be empty", Snackbar.LENGTH_SHORT).show()
                 }
+
                 /*val searchQuery = query_name // Replace with the user-provided query
                 try {
                     val intent = Intent(Intent.ACTION_VIEW)

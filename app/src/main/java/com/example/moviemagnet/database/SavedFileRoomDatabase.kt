@@ -1,7 +1,8 @@
-package com.example.moviemagnet.db
+package com.example.moviemagnet.database
 
 import android.content.*
 import androidx.room.*
+import com.example.moviemagnet.dao.*
 import com.example.moviemagnet.model.*
 
 @Database(entities = [ResponseModel::class], version = 1)

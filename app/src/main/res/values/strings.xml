@@ -33,7 +33,7 @@
     <string name="total_number_of_results">Total number of results</string>
     <string name="no_saved_file">No Saved File</string>
     <string name="no_history">No History</string>
-    <string name="delete_saved_files">Delete Saved Files</string>
+    <string name="delete_saved_files">Clear</string>
     <string name="history">History</string>
     <string name="history_type">History Type</string>
 

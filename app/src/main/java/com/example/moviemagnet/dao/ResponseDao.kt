@@ -1,4 +1,4 @@
-package com.example.moviemagnet.db
+package com.example.moviemagnet.dao
 
 import androidx.lifecycle.*
 import androidx.room.*
