@@ -11,11 +11,9 @@ import androidx.core.content.*
 import com.example.moviemagnet.R
 import com.example.moviemagnet.database.*
 import com.example.moviemagnet.databinding.*
-import com.example.moviemagnet.model.*
 import com.example.moviemagnet.repository.*
 import com.example.moviemagnet.util.*
 import com.google.android.material.snackbar.*
-import kotlinx.coroutines.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -31,12 +29,18 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view: View = binding.root
         setContentView(view)
-        repository = Repository(HistoryDatabase(this))
+        repository = Repository(HistoryDatabase(this), null)
         type_of_file_array = resources.getStringArray(R.array.spinner_options)
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, type_of_file_array)
+        val adapter =
+            ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, type_of_file_array)
         binding.typeOfFile.adapter = adapter
         binding.typeOfFile.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
                 if (position == 0) type_of_single_file_selected = ""
                 if (position >= 1) type_of_single_file_selected = type_of_file_array[position]
                 /*Log.d("is_this_ok", "the selected type is --> $type_of_file_selected")*/
@@ -48,7 +52,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.findYourFile.setOnClickListener {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET) == PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.INTERNET
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
                 query_name = binding.queryName.text.toString()
                 /*Log.d("is_this_ok", "query name --> $query_name")*/
                 if (query_name != "") {
@@ -57,7 +65,11 @@ class MainActivity : AppCompatActivity() {
                     intent.putExtra("type_of_single_file_selected", type_of_single_file_selected)
                     startActivity(intent)
                 } else {
-                    Snackbar.make(binding.root, "File name must not be empty", Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(
+                        binding.root,
+                        "File name must not be empty",
+                        Snackbar.LENGTH_SHORT
+                    ).show()
                 }
 
                 /*val searchQuery = query_name // Replace with the user-provided query
@@ -90,12 +102,12 @@ class MainActivity : AppCompatActivity() {
             }
 
             R.id.nav_share_app -> {
-                Util.showComingSoonToast(this@MainActivity)
+                Constants.showComingSoonToast(this@MainActivity)
                 return true
             }
 
             R.id.nav_search_web -> {
-                Util.showComingSoonToast(this@MainActivity)
+                Constants.showComingSoonToast(this@MainActivity)
                 return true
             }
 

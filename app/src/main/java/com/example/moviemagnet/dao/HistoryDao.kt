@@ -8,16 +8,19 @@ import com.example.moviemagnet.model.*
 interface HistoryDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(history: HistoryModel): Long
+    fun insert(history: HistoryModel): Long
 
     @Update
-    suspend fun update(history: HistoryModel): Int
+    fun update(history: HistoryModel): Int
+
+    @Delete
+    fun deleteHistory(history: HistoryModel)
 
     @Query("SELECT * FROM History")
     fun getAllHistory(): LiveData<List<HistoryModel>>
 
     @Transaction
-    suspend fun insertOrUpdate(history: HistoryModel): Any? {
+    fun insertOrUpdate(history: HistoryModel): Any? {
         val id = insert(history)
         return if (id == -1L) {
             update(history)

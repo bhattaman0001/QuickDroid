@@ -1,27 +1,46 @@
 package com.example.moviemagnet.repository
 
 import androidx.room.*
+import com.example.moviemagnet.BuildConfig
+import com.example.moviemagnet.api.RetrofitHelper
 import com.example.moviemagnet.database.*
 import com.example.moviemagnet.model.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class Repository(private val db: RoomDatabase) {
+class Repository(
+    private val historyDatabase: HistoryDatabase?,
+    private val savedFileRoomDatabase: SavedFileRoomDatabase?
+) {
 
     /*suspend fun historyInsert(history: HistoryModel) = (database as HistoryDatabase).getHistoryDao().insert(history)
     suspend fun historyUpdate(history: HistoryModel) = (database as HistoryDatabase).getHistoryDao().update(history)*/
 
+    suspend fun getFileFound(searchQuery: String, searchType: String) {
+        RetrofitHelper.response_api_interface.getData(
+            header1 = BuildConfig.header1,
+            header2 = BuildConfig.header2,
+            parameter1 = searchQuery,
+            parameter2 = searchType
+        )
+    }
 
-    fun historyGetAllHistory() = (db as HistoryDatabase).getHistoryDao().getAllHistory()
+    fun historyGetAllHistory() = historyDatabase?.getHistoryDao()?.getAllHistory()
 
-    suspend fun historyInsertOrUpdate(history: HistoryModel) = (db as HistoryDatabase).getHistoryDao().insertOrUpdate(history)
+    fun historyInsertOrUpdate(history: HistoryModel) =
+        historyDatabase?.getHistoryDao()?.insertOrUpdate(history)
 
-    suspend fun responseInsertOrUpdate(file: ResponseModel) = (db as SavedFileRoomDatabase).getFileDaa().insertOrUpdate(file)
+    fun responseInsertOrUpdate(file: ResponseModel) =
+        savedFileRoomDatabase?.getFileDaa()?.insertOrUpdate(file)
 
-    fun responseGetAllFile() = (db as SavedFileRoomDatabase).getFileDaa().getAllFile()
+    fun responseGetAllFile() = savedFileRoomDatabase?.getFileDaa()?.getAllFile()
 
-    suspend fun responseDeleteFile(file: ResponseModel) = (db as SavedFileRoomDatabase).getFileDaa().deleteFile(file)
+    fun responseDeleteFile(file: ResponseModel) =
+        savedFileRoomDatabase?.getFileDaa()?.deleteFile(file)
 
-
-
+    fun historyDelete(history: HistoryModel) =
+        historyDatabase?.getHistoryDao()?.deleteHistory(history)
 
 
     /*suspend fun responseInsertFile(file: ResponseModel) = (db as SavedFileRoomDatabase).getFileDaa().insertFile(file)

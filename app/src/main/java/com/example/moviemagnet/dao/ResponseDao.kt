@@ -8,23 +8,23 @@ import kotlin.coroutines.*
 @Dao
 interface ResponseDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertFile(file: ResponseModel): Long
+    fun insertFile(file: ResponseModel): Long
 
     @Query("SELECT * FROM FOUNDFILE")
     fun getAllFile(): LiveData<List<ResponseModel>>
 
     @Delete
-    suspend fun deleteFile(file: ResponseModel)
+    fun deleteFile(file: ResponseModel)
 
     @Update
-    suspend fun updateFile(file: ResponseModel): Int
+    fun updateFile(file: ResponseModel): Int
 
     @Transaction
-    suspend fun insertOrUpdate(file: ResponseModel): Any? {
+    fun insertOrUpdate(file: ResponseModel): Any? {
         val id = insertFile(file)
         return if (id == -1L) {
             updateFile(file)
-            file.file_link
+            file.id
         } else {
             id
         }

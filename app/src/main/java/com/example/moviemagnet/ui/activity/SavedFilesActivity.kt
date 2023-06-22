@@ -28,10 +28,10 @@ class SavedFilesActivity : AppCompatActivity(), SavedFileAdapter.OnDeleteClickLi
         binding = ActivitySavedFilesBinding.inflate(layoutInflater)
         val view: View = binding.root
         setContentView(view)
-        repository = Repository(SavedFileRoomDatabase(this))
+        repository = Repository(null, SavedFileRoomDatabase(this))
         val fileLiveData = repository.responseGetAllFile()
         recyclerView = binding.rvSavedFile
-        fileLiveData.observe(this) {
+        fileLiveData?.observe(this) {
             if (it.isNullOrEmpty()) {
                 binding.rvSavedFile.visibility = INVISIBLE
                 binding.noSavedFile.visibility = VISIBLE
@@ -61,8 +61,9 @@ class SavedFilesActivity : AppCompatActivity(), SavedFileAdapter.OnDeleteClickLi
             }
 
             R.id.clear_all -> {
-                Util.deleteAllSavedFile(this@SavedFilesActivity)
-                Toast.makeText(this, "Delete all saved files successfully", Toast.LENGTH_SHORT).show()
+                Constants.deleteAllSavedFile(this@SavedFilesActivity)
+                Toast.makeText(this, "Delete all saved files successfully", Toast.LENGTH_SHORT)
+                    .show()
                 return true
             }
 

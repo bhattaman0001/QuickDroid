@@ -40,7 +40,8 @@ class FileListActivity : AppCompatActivity() {
         recyclerViewFileList = binding.fileListRv
         if (intent.extras != null) {
             query_name = intent.getStringExtra("query_name").toString()
-            type_of_single_file_selected = intent.getStringExtra("type_of_single_file_selected").toString()
+            type_of_single_file_selected =
+                intent.getStringExtra("type_of_single_file_selected").toString()
             /*Log.d("is_this_ok", "query_name --> $query_name | type_of_query --> $type_of_single_file_selected")*/
         }
 
@@ -55,23 +56,27 @@ class FileListActivity : AppCompatActivity() {
                     parameter2 = type_of_single_file_selected
                 )
 
-                val responseTime = (response.raw().receivedResponseAtMillis - response.raw().sentRequestAtMillis).toDouble() / 1000.0
-                binding.responseTime.text = "Your request took $responseTime seconds to find and display! Thanks"
+                val responseTime =
+                    (response.raw().receivedResponseAtMillis - response.raw().sentRequestAtMillis).toDouble() / 1000.0
+                binding.responseTime.text =
+                    "Your request took $responseTime seconds to find and display! Thanks"
                 binding.responseTime.isAllCaps = true
 
                 /*Log.d("is_this_ok", "response is --> $response | response success --> ${response.isSuccessful}")*/
-                Snackbar.make(view, "Response is ${response.body()?.status}", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(view, "Response is ${response.body()?.status}", Snackbar.LENGTH_SHORT)
+                    .show()
                 if (response.isSuccessful) {
                     val data = response.body()?.files_found
                     binding.numberOfResults.text = "Total results : " + data?.size.toString()
                     binding.numberOfResults.isAllCaps = true
                     recyclerViewFileList.layoutManager = LinearLayoutManager(this@FileListActivity)
 
-                    repository = Repository(SavedFileRoomDatabase(this@FileListActivity))
-                    adapter = FileResponseAdapter(data?.distinct(), this@FileListActivity, repository)
+                    repository = Repository(null, SavedFileRoomDatabase(this@FileListActivity))
+                    adapter =
+                        FileResponseAdapter(data?.distinct(), this@FileListActivity, repository)
 
                     // if the response is success then insert it into history db
-                    repository = Repository(HistoryDatabase(this@FileListActivity))
+                    repository = Repository(HistoryDatabase(this@FileListActivity), null)
                     repository.historyInsertOrUpdate(history)
 
                     recyclerViewFileList.adapter = adapter
@@ -150,12 +155,12 @@ class FileListActivity : AppCompatActivity() {
             }
 
             R.id.nav_share_app -> {
-                Util.showComingSoonToast(this@FileListActivity)
+                Constants.showComingSoonToast(this@FileListActivity)
                 return true
             }
 
             R.id.nav_search_web -> {
-                Util.showComingSoonToast(this@FileListActivity)
+                Constants.showComingSoonToast(this@FileListActivity)
                 return true
             }
 

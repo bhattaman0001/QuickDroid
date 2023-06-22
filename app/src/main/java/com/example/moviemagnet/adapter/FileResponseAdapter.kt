@@ -41,20 +41,20 @@ class FileResponseAdapter(private val data: List<ResponseModel>?, private val co
                 binding.saveYourFile.text = "Saved"
                 binding.saveYourFile.background.setTint(context.resources.getColor(android.R.color.holo_green_light))
                 binding.saveYourFile.setTextColor(context.resources.getColor(R.color.black))
-                Util.showInsertToast(context)
+                Constants.showInsertToast(context)
             }
             binding.deleteYourFile.visibility = GONE
             binding.shareFile.setOnClickListener {
                 val shareIntent = Intent(Intent.ACTION_SEND)
                 shareIntent.type = "text/plain"
-                shareIntent.putExtra(Intent.EXTRA_TEXT, Util.message + url)
+                shareIntent.putExtra(Intent.EXTRA_TEXT, Constants.message + url)
                 context.startActivity(Intent.createChooser(shareIntent, "Share via"))
             }
             binding.whatsappShare.setOnClickListener {
                 val shareIntent = Intent(Intent.ACTION_SEND)
                 shareIntent.type = "text/plain"
                 shareIntent.setPackage("com.whatsapp")
-                shareIntent.putExtra(Intent.EXTRA_TEXT, Util.message + url)
+                shareIntent.putExtra(Intent.EXTRA_TEXT, Constants.message + url)
                 try {
                     context.startActivity(shareIntent)
                 } catch (ex: ActivityNotFoundException) {
@@ -64,7 +64,7 @@ class FileResponseAdapter(private val data: List<ResponseModel>?, private val co
             binding.instagramShare.setOnClickListener {
                 val shareIntent = Intent(Intent.ACTION_SEND)
                 shareIntent.type = "text/plain"
-                shareIntent.putExtra(Intent.EXTRA_TEXT, Util.message + url)
+                shareIntent.putExtra(Intent.EXTRA_TEXT, Constants.message + url)
                 shareIntent.setPackage("com.instagram.android")
                 try {
                     context.startActivity(shareIntent)
@@ -75,7 +75,7 @@ class FileResponseAdapter(private val data: List<ResponseModel>?, private val co
             binding.telegramShare.setOnClickListener {
                 val shareIntent = Intent(Intent.ACTION_SEND)
                 shareIntent.type = "text/plain"
-                shareIntent.putExtra(Intent.EXTRA_TEXT, Util.message + url)
+                shareIntent.putExtra(Intent.EXTRA_TEXT, Constants.message + url)
                 shareIntent.setPackage("org.telegram.messenger")
                 try {
                     context.startActivity(shareIntent)

@@ -1,6 +1,7 @@
 package com.example.moviemagnet.adapter
 
 import android.annotation.*
+import android.app.AlertDialog
 import android.content.*
 import android.view.*
 import androidx.lifecycle.*
@@ -9,9 +10,15 @@ import com.example.moviemagnet.databinding.*
 import com.example.moviemagnet.model.*
 import com.example.moviemagnet.ui.activity.*
 import com.google.android.material.snackbar.*
+import android.content.DialogInterface
+
 
 @SuppressLint("NotifyDataSetChanged")
-class HistoryAdapter(history: LiveData<List<HistoryModel>>, private val context: Context) : RecyclerView.Adapter<HistoryAdapter.ViewHolder>() {
+class HistoryAdapter(
+    history: LiveData<List<HistoryModel>>,
+    private val context: Context,
+    private val onDeleteClickListener: OnDeleteClickListener
+) : RecyclerView.Adapter<HistoryAdapter.ViewHolder>() {
 
     private var fileHistory: List<HistoryModel> = emptyList()
     private lateinit var binding: HistoryItemBinding
@@ -23,21 +30,21 @@ class HistoryAdapter(history: LiveData<List<HistoryModel>>, private val context:
         }
     }
 
-    fun deleteItem(position: Int) {
-        // Remove the item from the data source and notify the adapter
-        val deletedItem = fileHistory.removeAt(position)
-        notifyItemRemoved(position)
-
-        Snackbar.make(binding.root, "Successfully Deleted article", Snackbar.LENGTH_SHORT).apply {
-            setAction("Undo") {
-
-            }
-            show()
-        }
+    interface OnDeleteClickListener {
+        fun onDeleteClick(history: HistoryModel)
     }
 
-    inner class ViewHolder(private val binding: HistoryItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(private val binding: HistoryItemBinding) :
+        RecyclerView.ViewHolder(binding.root), View.OnLongClickListener {
+
+        init {
+            binding.root.setOnLongClickListener(this)
+        }
+
+        private lateinit var history: HistoryModel
+
         fun bind(history: HistoryModel) {
+            this.history = history
             binding.historyTxt.text = history.queryName
             binding.historyType.text = history.queryType
             binding.searchIcon.setOnClickListener {
@@ -47,9 +54,28 @@ class HistoryAdapter(history: LiveData<List<HistoryModel>>, private val context:
                     intent.putExtra("type_of_single_file_selected", history.queryType)
                     context.startActivity(intent)
                 } else {
-                    Snackbar.make(binding.root, "File name must not be empty", Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(
+                        binding.root,
+                        "File name must not be empty",
+                        Snackbar.LENGTH_SHORT
+                    ).show()
                 }
             }
+        }
+
+        override fun onLongClick(view: View?): Boolean {
+            AlertDialog.Builder(context)
+                .setTitle("Delete History")
+                .setMessage("Are you sure you want to delete it?")
+                .setPositiveButton(
+                    android.R.string.yes
+                ) { _, _ ->
+                    onDeleteClickListener.onDeleteClick(history)
+                }
+                .setNegativeButton(android.R.string.no, null)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show()
+            return true
         }
     }
 

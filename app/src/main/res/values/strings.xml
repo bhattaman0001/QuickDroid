@@ -10,7 +10,6 @@
         <item>Archives</item>
     </string-array>
 
-    <string name="spinner_prompt">Type of query</string>
     <string name="home">Home</string>
     <string name="share_app">Share App</string>
     <string name="search_on_web">Search on Web</string>

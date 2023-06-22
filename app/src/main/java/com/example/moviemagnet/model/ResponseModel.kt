@@ -3,7 +3,10 @@ package com.example.moviemagnet.model
 import androidx.room.*
 import java.io.*
 
-@Entity(tableName = "foundfile" /*primaryKeys = ["id", "file_link", "file_name"]*/, indices = [Index(value = ["file_link", "file_name"], unique = true)])
+@Entity(
+    tableName = "foundfile" /*primaryKeys = ["id", "file_link", "file_name"]*/,
+    indices = [Index(value = ["file_link", "file_name"], unique = true)]
+)
 data class ResponseModel(
     @PrimaryKey(autoGenerate = true)
     var id: Int? = null,
@@ -20,4 +23,4 @@ data class ResponseModel(
     var referrer_link: String?,
     var referrer_host: String?,
     var readable_path: String?,
-) : Serializable
+)

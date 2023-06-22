@@ -48,19 +48,19 @@ class SavedFileAdapter(fileData: LiveData<List<ResponseModel>>, private val cont
             binding.saveYourFile.visibility = GONE
             binding.deleteYourFile.setOnClickListener {
                 onDeleteClickListener.onDeleteClick(file)
-                Util.showDeleteToast(context)
+                Constants.showDeleteToast(context)
             }
             binding.shareFile.setOnClickListener {
                 val shareIntent = Intent(Intent.ACTION_SEND)
                 shareIntent.type = "text/plain"
-                shareIntent.putExtra(Intent.EXTRA_TEXT, Util.message + url)
+                shareIntent.putExtra(Intent.EXTRA_TEXT, Constants.message + url)
                 context.startActivity(Intent.createChooser(shareIntent, "Share via"))
             }
             binding.whatsappShare.setOnClickListener {
                 val shareIntent = Intent(Intent.ACTION_SEND)
                 shareIntent.type = "text/plain"
                 shareIntent.setPackage("com.whatsapp")
-                shareIntent.putExtra(Intent.EXTRA_TEXT, Util.message + url)
+                shareIntent.putExtra(Intent.EXTRA_TEXT, Constants.message + url)
                 try {
                     context.startActivity(shareIntent)
                 } catch (ex: ActivityNotFoundException) {
@@ -70,7 +70,7 @@ class SavedFileAdapter(fileData: LiveData<List<ResponseModel>>, private val cont
             binding.instagramShare.setOnClickListener {
                 val shareIntent = Intent(Intent.ACTION_SEND)
                 shareIntent.type = "text/plain"
-                shareIntent.putExtra(Intent.EXTRA_TEXT, Util.message + url)
+                shareIntent.putExtra(Intent.EXTRA_TEXT, Constants.message + url)
                 shareIntent.setPackage("com.instagram.android")
                 try {
                     context.startActivity(shareIntent)
@@ -81,7 +81,7 @@ class SavedFileAdapter(fileData: LiveData<List<ResponseModel>>, private val cont
             binding.telegramShare.setOnClickListener {
                 val shareIntent = Intent(Intent.ACTION_SEND)
                 shareIntent.type = "text/plain"
-                shareIntent.putExtra(Intent.EXTRA_TEXT, Util.message + url)
+                shareIntent.putExtra(Intent.EXTRA_TEXT, Constants.message + url)
                 shareIntent.setPackage("org.telegram.messenger")
                 try {
                     context.startActivity(shareIntent)
