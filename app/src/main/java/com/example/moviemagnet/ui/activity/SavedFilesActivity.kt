@@ -28,7 +28,7 @@ class SavedFilesActivity : AppCompatActivity(), SavedFileAdapter.OnDeleteClickLi
         binding = ActivitySavedFilesBinding.inflate(layoutInflater)
         val view: View = binding.root
         setContentView(view)
-        repository = Repository(null, SavedFileRoomDatabase(this))
+        repository = Repository(SavedFileRoomDatabase(this))
         val fileLiveData = repository.responseGetAllFile()
         recyclerView = binding.rvSavedFile
         fileLiveData?.observe(this) {

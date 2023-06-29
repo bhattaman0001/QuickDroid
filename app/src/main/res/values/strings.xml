@@ -32,8 +32,14 @@
     <string name="total_number_of_results">Total number of results</string>
     <string name="no_saved_file">No Saved File</string>
     <string name="no_history">No History</string>
+    <string name="no_downloaded_video">No Downloaded Video</string>
     <string name="delete_saved_files">Clear</string>
     <string name="history">History</string>
     <string name="history_type">History Type</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="show_downloaded_media">Show Downloaded Media</string>
+    <string name="demo_code_1">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis eleifend sem nec lacus iaculis, in scelerisque odio rutrum. Vivamus vulputate augue ac dolor rutrum, nec cursus erat pulvinar.</string>
+    <string name="demo_code_2">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis eleifend sem nec lacus iaculis, in scelerisque odio rutrum.</string>
 
 </resources>

@@ -10,8 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class Repository(
-    private val historyDatabase: HistoryDatabase?,
-    private val savedFileRoomDatabase: SavedFileRoomDatabase?
+    private val db: RoomDatabase
 ) {
 
     /*suspend fun historyInsert(history: HistoryModel) = (database as HistoryDatabase).getHistoryDao().insert(history)
@@ -26,21 +25,22 @@ class Repository(
         )
     }
 
-    fun historyGetAllHistory() = historyDatabase?.getHistoryDao()?.getAllHistory()
+    fun historyGetAllHistory() = (db as HistoryDatabase).getHistoryDao().getAllHistory()
 
     fun historyInsertOrUpdate(history: HistoryModel) =
-        historyDatabase?.getHistoryDao()?.insertOrUpdate(history)
-
-    fun responseInsertOrUpdate(file: ResponseModel) =
-        savedFileRoomDatabase?.getFileDaa()?.insertOrUpdate(file)
-
-    fun responseGetAllFile() = savedFileRoomDatabase?.getFileDaa()?.getAllFile()
-
-    fun responseDeleteFile(file: ResponseModel) =
-        savedFileRoomDatabase?.getFileDaa()?.deleteFile(file)
+        (db as HistoryDatabase).getHistoryDao().insertOrUpdate(history)
 
     fun historyDelete(history: HistoryModel) =
-        historyDatabase?.getHistoryDao()?.deleteHistory(history)
+        (db as HistoryDatabase).getHistoryDao().deleteHistory(history)
+
+    fun responseInsertOrUpdate(file: ResponseModel) =
+        (db as SavedFileRoomDatabase).getFileDaa().insertOrUpdate(file)
+
+    fun responseGetAllFile() =
+        (db as SavedFileRoomDatabase).getFileDaa().getAllFile()
+
+    fun responseDeleteFile(file: ResponseModel) =
+        (db as SavedFileRoomDatabase).getFileDaa().deleteFile(file)
 
 
     /*suspend fun responseInsertFile(file: ResponseModel) = (db as SavedFileRoomDatabase).getFileDaa().insertFile(file)

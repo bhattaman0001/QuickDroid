@@ -71,12 +71,12 @@ class FileListActivity : AppCompatActivity() {
                     binding.numberOfResults.isAllCaps = true
                     recyclerViewFileList.layoutManager = LinearLayoutManager(this@FileListActivity)
 
-                    repository = Repository(null, SavedFileRoomDatabase(this@FileListActivity))
+                    repository = Repository(SavedFileRoomDatabase(this@FileListActivity))
                     adapter =
                         FileResponseAdapter(data?.distinct(), this@FileListActivity, repository)
 
                     // if the response is success then insert it into history db
-                    repository = Repository(HistoryDatabase(this@FileListActivity), null)
+                    repository = Repository(HistoryDatabase(this@FileListActivity))
                     repository.historyInsertOrUpdate(history)
 
                     recyclerViewFileList.adapter = adapter

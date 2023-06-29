@@ -28,7 +28,7 @@ class HistoryActivity : AppCompatActivity(), HistoryAdapter.OnDeleteClickListene
         binding = ActivityHistoryBinding.inflate(layoutInflater)
         val view: View = binding.root
         setContentView(view)
-        repository = Repository(HistoryDatabase(this), null)
+        repository = Repository(HistoryDatabase(this))
         val historyLiveData = repository.historyGetAllHistory()
         historyLiveData?.observe(this) {
             if (it.isNullOrEmpty()) {

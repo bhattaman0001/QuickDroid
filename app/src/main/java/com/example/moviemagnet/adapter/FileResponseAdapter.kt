@@ -15,18 +15,24 @@ import com.example.moviemagnet.util.*
 import kotlinx.coroutines.*
 
 
-class FileResponseAdapter(private val data: List<ResponseModel>?, private val context: Context, private val repository: Repository) :
+class FileResponseAdapter(
+    private val data: List<ResponseModel>?,
+    private val context: Context,
+    private val repository: Repository
+) :
     RecyclerView.Adapter<FileResponseAdapter.ViewHolder>() {
 
     private lateinit var binding: FileItemBinding
 
-    inner class ViewHolder(private val binding: FileItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(private val binding: FileItemBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         fun bind(response: ResponseModel?, position: Int) {
             binding.nameOfFile.text = response?.file_name
             binding.fileType.text = response?.file_type
             binding.dateAdded.text = response?.date_added
             binding.timeAgo.text = response?.time_ago
-            binding.fileSize.text = if (response?.file_size != "") response?.file_size else "No Size"
+            binding.fileSize.text =
+                if (response?.file_size != "") response?.file_size else "No Size"
             val url = response?.file_link
             binding.downloadLink.setOnClickListener {
                 val intent = Intent(Intent.ACTION_VIEW)
@@ -42,6 +48,7 @@ class FileResponseAdapter(private val data: List<ResponseModel>?, private val co
                 binding.saveYourFile.background.setTint(context.resources.getColor(android.R.color.holo_green_light))
                 binding.saveYourFile.setTextColor(context.resources.getColor(R.color.black))
                 Constants.showInsertToast(context)
+                binding.saveYourFile.isEnabled = false
             }
             binding.deleteYourFile.visibility = GONE
             binding.shareFile.setOnClickListener {
@@ -86,7 +93,10 @@ class FileResponseAdapter(private val data: List<ResponseModel>?, private val co
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FileResponseAdapter.ViewHolder {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): FileResponseAdapter.ViewHolder {
         binding = FileItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
