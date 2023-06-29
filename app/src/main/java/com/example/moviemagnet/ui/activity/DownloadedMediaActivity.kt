@@ -39,6 +39,7 @@ class DownloadedMediaActivity : AppCompatActivity() {
             arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE),
             PackageManager.PERMISSION_GRANTED
         )
+
         val videos = getDownloadedVideos()
         if (videos.isEmpty()) {
             binding.noDownloaded.visibility = VISIBLE
@@ -46,7 +47,7 @@ class DownloadedMediaActivity : AppCompatActivity() {
         } else {
             binding.noDownloaded.visibility = GONE
             binding.downloadListRv.visibility = VISIBLE
-            videoAdapter = VideoAdapter(videos)
+            videoAdapter = VideoAdapter(this@DownloadedMediaActivity, videos)
             recyclerView.adapter = videoAdapter
         }
     }
@@ -66,6 +67,7 @@ class DownloadedMediaActivity : AppCompatActivity() {
                     )
                     val video = Video(
                         file.name,
+                        file.path,
                         bMap,
                         lastModified,
                         size
