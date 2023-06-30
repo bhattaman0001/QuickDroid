@@ -12,9 +12,6 @@ class Repository(
     private val db: RoomDatabase
 ) {
 
-    /*suspend fun historyInsert(history: HistoryModel) = (database as HistoryDatabase).getHistoryDao().insert(history)
-    suspend fun historyUpdate(history: HistoryModel) = (database as HistoryDatabase).getHistoryDao().update(history)*/
-
     suspend fun getFileFound(searchQuery: String, searchType: String) {
         RetrofitHelper.responseApiInterface.getData(
             header1 = BuildConfig.header1,
