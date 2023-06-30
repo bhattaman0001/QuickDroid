@@ -4,17 +4,16 @@ import android.content.*
 import android.os.*
 import android.view.*
 import android.view.View.GONE
-import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.widget.*
 import androidx.appcompat.app.*
 import androidx.recyclerview.widget.*
 import com.example.moviemagnet.*
-import com.example.moviemagnet.adapter.*
-import com.example.moviemagnet.database.*
+import com.example.moviemagnet.data.db.database.SavedFileRoomDatabase
+import com.example.moviemagnet.data.db.entity.ResponseModel
+import com.example.moviemagnet.data.repository.Repository
 import com.example.moviemagnet.databinding.*
-import com.example.moviemagnet.model.*
-import com.example.moviemagnet.repository.*
+import com.example.moviemagnet.ui.adapter.SavedFileAdapter
 import com.example.moviemagnet.util.*
 import kotlinx.coroutines.*
 

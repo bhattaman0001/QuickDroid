@@ -12,12 +12,14 @@ import androidx.appcompat.app.*
 import androidx.lifecycle.*
 import androidx.recyclerview.widget.*
 import com.example.moviemagnet.*
-import com.example.moviemagnet.adapter.*
 import com.example.moviemagnet.api.*
-import com.example.moviemagnet.database.*
+import com.example.moviemagnet.data.db.database.HistoryDatabase
+import com.example.moviemagnet.data.db.database.SavedFileRoomDatabase
+import com.example.moviemagnet.data.db.entity.HistoryModel
+import com.example.moviemagnet.data.repository.Repository
 import com.example.moviemagnet.databinding.*
 import com.example.moviemagnet.model.*
-import com.example.moviemagnet.repository.*
+import com.example.moviemagnet.ui.adapter.FileResponseAdapter
 import com.example.moviemagnet.util.*
 import com.google.android.material.bottomsheet.*
 import com.google.android.material.snackbar.*
@@ -26,8 +28,8 @@ import kotlinx.coroutines.*
 class FileListActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityFileListBinding
-    private var type_of_single_file_selected: String = ""
-    private var query_name: String = ""
+    private var typeOfSingleFileSelected: String = ""
+    private var queryName: String = ""
     private lateinit var recyclerViewFileList: RecyclerView
     private lateinit var adapter: FileResponseAdapter
     private lateinit var repository: Repository
@@ -39,21 +41,21 @@ class FileListActivity : AppCompatActivity() {
         setContentView(view)
         recyclerViewFileList = binding.fileListRv
         if (intent.extras != null) {
-            query_name = intent.getStringExtra("query_name").toString()
-            type_of_single_file_selected =
+            queryName = intent.getStringExtra("query_name").toString()
+            typeOfSingleFileSelected =
                 intent.getStringExtra("type_of_single_file_selected").toString()
             /*Log.d("is_this_ok", "query_name --> $query_name | type_of_query --> $type_of_single_file_selected")*/
         }
 
-        val history = HistoryModel(query_name, type_of_single_file_selected)
+        val history = HistoryModel(queryName, typeOfSingleFileSelected)
 
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val response = RetrofitHelper.response_api_interface.getData(
+                val response = RetrofitHelper.responseApiInterface.getData(
                     header1 = BuildConfig.header1,
                     header2 = BuildConfig.header2,
-                    parameter1 = query_name,
-                    parameter2 = type_of_single_file_selected
+                    parameter1 = queryName,
+                    parameter2 = typeOfSingleFileSelected
                 )
 
                 val responseTime =

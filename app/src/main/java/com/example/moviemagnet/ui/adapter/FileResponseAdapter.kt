@@ -1,4 +1,4 @@
-package com.example.moviemagnet.adapter
+package com.example.moviemagnet.ui.adapter
 
 import android.annotation.*
 import android.content.*
@@ -8,9 +8,9 @@ import android.view.View.GONE
 import android.widget.*
 import androidx.recyclerview.widget.*
 import com.example.moviemagnet.*
+import com.example.moviemagnet.data.db.entity.ResponseModel
+import com.example.moviemagnet.data.repository.Repository
 import com.example.moviemagnet.databinding.*
-import com.example.moviemagnet.model.*
-import com.example.moviemagnet.repository.*
 import com.example.moviemagnet.util.*
 import kotlinx.coroutines.*
 
@@ -101,13 +101,13 @@ class FileResponseAdapter(
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): FileResponseAdapter.ViewHolder {
+    ): ViewHolder {
         binding = FileItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
 
     @SuppressLint("UseCompatLoadingForColorStateLists", "NotifyDataSetChanged")
-    override fun onBindViewHolder(holder: FileResponseAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if (position != -1) {
             val file_found_are = data?.get(position)
             holder.bind(file_found_are, position)

@@ -10,9 +10,9 @@ import android.widget.*
 import androidx.appcompat.app.*
 import androidx.core.content.*
 import com.example.moviemagnet.R
-import com.example.moviemagnet.database.*
+import com.example.moviemagnet.data.db.database.HistoryDatabase
+import com.example.moviemagnet.data.repository.Repository
 import com.example.moviemagnet.databinding.*
-import com.example.moviemagnet.repository.*
 import com.example.moviemagnet.util.*
 import com.google.android.material.snackbar.*
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -24,9 +24,9 @@ import com.google.firebase.ktx.Firebase
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    var type_of_file_array: Array<String> = emptyArray()
-    var type_of_single_file_selected: String = ""
-    var query_name: String = ""
+    var typeOfFileArray: Array<String> = emptyArray()
+    var typeOfSingleFileSelected: String = ""
+    private var queryName: String = ""
     private lateinit var repository: Repository
     private lateinit var downloadMediaButton: Button
     private lateinit var firebaseAnalytics: FirebaseAnalytics
@@ -49,17 +49,17 @@ class MainActivity : AppCompatActivity() {
             }
         }
         repository = Repository(HistoryDatabase(this))
-        type_of_file_array = resources.getStringArray(R.array.spinner_options)
+        typeOfFileArray = resources.getStringArray(R.array.spinner_options)
         val adapter =
-            ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, type_of_file_array)
+            ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, typeOfFileArray)
         binding.typeOfFile.adapter = adapter
         binding.typeOfFile.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>?, view: View?, position: Int, id: Long
             ) {
-                if (position == 0) type_of_single_file_selected = ""
-                if (position >= 1) type_of_single_file_selected =
-                    type_of_file_array[position]
+                if (position == 0) typeOfSingleFileSelected = ""
+                if (position >= 1) typeOfSingleFileSelected =
+                    typeOfFileArray[position]
                 /*Log.d("is_this_ok", "the selected type is --> $type_of_file_selected")*/
             }
 
@@ -77,12 +77,12 @@ class MainActivity : AppCompatActivity() {
                     param(FirebaseAnalytics.Param.CONTENT_TYPE, "button")
                     param(FirebaseAnalytics.Param.ITEM_ID, "Find Your File Button")
                 }
-                query_name =
+                queryName =
                     binding.queryName.text.toString()/*Log.d("is_this_ok", "query name --> $query_name")*/
-                if (query_name != "") {
+                if (queryName != "") {
                     Intent(this, FileListActivity::class.java).apply {
                         putExtra("query_name", "query_name")
-                        putExtra("type_of_single_file_selected", type_of_single_file_selected)
+                        putExtra("type_of_single_file_selected", typeOfSingleFileSelected)
                         startActivity(this)
                     }
                 } else {

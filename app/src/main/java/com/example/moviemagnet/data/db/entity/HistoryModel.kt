@@ -1,4 +1,4 @@
-package com.example.moviemagnet.model
+package com.example.moviemagnet.data.db.entity
 
 import androidx.room.*
 import java.io.*

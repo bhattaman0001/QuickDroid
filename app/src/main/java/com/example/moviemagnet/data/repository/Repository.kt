@@ -1,13 +1,12 @@
-package com.example.moviemagnet.repository
+package com.example.moviemagnet.data.repository
 
 import androidx.room.*
 import com.example.moviemagnet.BuildConfig
 import com.example.moviemagnet.api.RetrofitHelper
-import com.example.moviemagnet.database.*
-import com.example.moviemagnet.model.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.example.moviemagnet.data.db.database.HistoryDatabase
+import com.example.moviemagnet.data.db.database.SavedFileRoomDatabase
+import com.example.moviemagnet.data.db.entity.HistoryModel
+import com.example.moviemagnet.data.db.entity.ResponseModel
 
 class Repository(
     private val db: RoomDatabase
@@ -17,7 +16,7 @@ class Repository(
     suspend fun historyUpdate(history: HistoryModel) = (database as HistoryDatabase).getHistoryDao().update(history)*/
 
     suspend fun getFileFound(searchQuery: String, searchType: String) {
-        RetrofitHelper.response_api_interface.getData(
+        RetrofitHelper.responseApiInterface.getData(
             header1 = BuildConfig.header1,
             header2 = BuildConfig.header2,
             parameter1 = searchQuery,

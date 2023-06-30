@@ -9,11 +9,11 @@ import android.widget.*
 import androidx.appcompat.app.*
 import androidx.recyclerview.widget.*
 import com.example.moviemagnet.*
-import com.example.moviemagnet.adapter.*
-import com.example.moviemagnet.database.*
+import com.example.moviemagnet.data.db.database.HistoryDatabase
+import com.example.moviemagnet.data.repository.Repository
 import com.example.moviemagnet.databinding.*
-import com.example.moviemagnet.model.HistoryModel
-import com.example.moviemagnet.repository.*
+import com.example.moviemagnet.data.db.entity.HistoryModel
+import com.example.moviemagnet.ui.adapter.HistoryAdapter
 import com.example.moviemagnet.util.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

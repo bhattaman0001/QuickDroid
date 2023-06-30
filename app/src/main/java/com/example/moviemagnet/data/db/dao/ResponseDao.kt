@@ -1,7 +1,8 @@
-package com.example.moviemagnet.dao
+package com.example.moviemagnet.data.db.dao
 
 import androidx.lifecycle.*
 import androidx.room.*
+import com.example.moviemagnet.data.db.entity.ResponseModel
 import com.example.moviemagnet.model.*
 import kotlin.coroutines.*
 
@@ -10,7 +11,7 @@ interface ResponseDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertFile(file: ResponseModel): Long
 
-    @Query("SELECT * FROM FOUNDFILE")
+    @Query("SELECT * FROM foundFile")
     fun getAllFile(): LiveData<List<ResponseModel>>
 
     @Delete

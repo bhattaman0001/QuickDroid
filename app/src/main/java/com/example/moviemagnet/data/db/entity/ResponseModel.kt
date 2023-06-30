@@ -1,10 +1,10 @@
-package com.example.moviemagnet.model
+package com.example.moviemagnet.data.db.entity
 
 import androidx.room.*
 import java.io.*
 
 @Entity(
-    tableName = "foundfile" /*primaryKeys = ["id", "file_link", "file_name"]*/,
+    tableName = "foundFile" /*primaryKeys = ["id", "file_link", "file_name"]*/,
     indices = [Index(value = ["file_link", "file_name"], unique = true)]
 )
 data class ResponseModel(

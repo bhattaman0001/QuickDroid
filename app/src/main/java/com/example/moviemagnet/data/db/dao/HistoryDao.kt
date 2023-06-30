@@ -1,7 +1,8 @@
-package com.example.moviemagnet.dao
+package com.example.moviemagnet.data.db.dao
 
 import androidx.lifecycle.*
 import androidx.room.*
+import com.example.moviemagnet.data.db.entity.HistoryModel
 import com.example.moviemagnet.model.*
 
 @Dao

@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.moviemagnet.adapter.VideoAdapter
+import com.example.moviemagnet.ui.adapter.VideoAdapter
 import com.example.moviemagnet.databinding.ActivityDownloadedMediaBinding
 import com.example.moviemagnet.model.Video
 import java.io.File

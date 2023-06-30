@@ -1,18 +1,14 @@
 package com.example.moviemagnet.util
 
 import android.content.Context
-import android.content.Context.STORAGE_SERVICE
-import android.os.storage.StorageManager
 import android.widget.Toast
-import androidx.core.content.ContextCompat.getSystemService
-import com.example.moviemagnet.database.HistoryDatabase
-import com.example.moviemagnet.database.SavedFileRoomDatabase
-import com.example.moviemagnet.model.HistoryModel
-import com.example.moviemagnet.model.ResponseModel
+import com.example.moviemagnet.data.db.database.HistoryDatabase
+import com.example.moviemagnet.data.db.database.SavedFileRoomDatabase
+import com.example.moviemagnet.data.db.entity.HistoryModel
+import com.example.moviemagnet.data.db.entity.ResponseModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.io.File
 
 
 object Constants {

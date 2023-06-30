@@ -20,7 +20,7 @@ class RetrofitHelper {
                 .client(client)
                 .build()
         }
-        val response_api_interface by lazy {
+        val responseApiInterface: ResponseApiInterface by lazy {
             retrofit.create(ResponseApiInterface::class.java)
         }
     }

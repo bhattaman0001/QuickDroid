@@ -1,8 +1,8 @@
-package com.example.moviemagnet.viewmodels
+package com.example.moviemagnet.ui.viewmodels
 
 import android.app.*
 import androidx.lifecycle.*
-import com.example.moviemagnet.repository.*
+import com.example.moviemagnet.data.repository.Repository
 
 class MainViewModelFactory(
     val app: Application, private val repository: Repository,

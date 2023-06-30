@@ -1,4 +1,4 @@
-package com.example.moviemagnet.viewmodels
+package com.example.moviemagnet.ui.viewmodels
 
 import android.app.*
 import android.content.Context
@@ -7,20 +7,18 @@ import android.net.NetworkCapabilities
 import android.util.Log
 import androidx.lifecycle.*
 import com.example.moviemagnet.FileApplication
+import com.example.moviemagnet.data.repository.Repository
 import com.example.moviemagnet.model.FileFoundModel
-import com.example.moviemagnet.model.HistoryModel
-import com.example.moviemagnet.model.ResponseModel
-import com.example.moviemagnet.repository.*
+import com.example.moviemagnet.data.db.entity.HistoryModel
+import com.example.moviemagnet.data.db.entity.ResponseModel
 import com.example.moviemagnet.util.Resource
-import retrofit2.Response
-import java.io.IOException
 
 class MainViewModel(
     val app: Application, private val repository: Repository
 ) : AndroidViewModel(app) {
-    private val responseLiveData: MutableLiveData<Resource<FileFoundModel>> = MutableLiveData()
+    /*private val responseLiveData: MutableLiveData<Resource<FileFoundModel>> = MutableLiveData()
     private val history: MutableLiveData<Resource<HistoryModel>> = MutableLiveData()
-    private val savedFile: MutableLiveData<Resource<ResponseModel>> = MutableLiveData()
+    private val savedFile: MutableLiveData<Resource<ResponseModel>> = MutableLiveData()*/
 
     /*private suspend fun getFileResponse(searchQuery: String, searchType: String) {
         responseLiveData.postValue(Resource.Loading())
@@ -46,6 +44,8 @@ class MainViewModel(
         return Resource.Error(response.message())
     }*/
 
+
+
     private fun isOnline(): Boolean {
         val connectivityManager =
             getApplication<FileApplication>().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -66,6 +66,6 @@ class MainViewModel(
         return false
     }
 
-    val responseFile: LiveData<Resource<FileFoundModel>> get() = responseLiveData
+    /*val responseFile: LiveData<Resource<FileFoundModel>> get() = responseLiveData*/
 
 }

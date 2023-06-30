@@ -1,4 +1,4 @@
-package com.example.moviemagnet.adapter
+package com.example.moviemagnet.ui.adapter
 
 import android.annotation.*
 import android.app.AlertDialog
@@ -10,7 +10,7 @@ import com.example.moviemagnet.databinding.*
 import com.example.moviemagnet.model.*
 import com.example.moviemagnet.ui.activity.*
 import com.google.android.material.snackbar.*
-import android.content.DialogInterface
+import com.example.moviemagnet.data.db.entity.HistoryModel
 
 
 @SuppressLint("NotifyDataSetChanged")
@@ -80,12 +80,12 @@ class HistoryAdapter(
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistoryAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         binding = HistoryItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: HistoryAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val history = fileHistory[position]
         holder.bind(history)
     }

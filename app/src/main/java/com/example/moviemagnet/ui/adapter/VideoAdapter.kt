@@ -1,4 +1,4 @@
-package com.example.moviemagnet.adapter
+package com.example.moviemagnet.ui.adapter
 
 import android.content.Context
 import android.content.Intent
@@ -34,12 +34,12 @@ class VideoAdapter(private val context: Context, private val videos: List<Video>
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VideoAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         binding = ItemVideoBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: VideoAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val video = videos[position]
         holder.bind(video)
     }

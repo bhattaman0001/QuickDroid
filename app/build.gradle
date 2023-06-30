@@ -70,7 +70,6 @@ dependencies {
 
     // LiveData
     implementation "androidx.lifecycle:lifecycle-livedata:2.6.1"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.6.1"
 
     // Room
     implementation 'androidx.room:room-runtime:2.5.2'
@@ -88,6 +87,8 @@ dependencies {
 
     // viewModel
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.6.1"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.6.1"
 
     // okHTTP logging
     implementation "com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.2"

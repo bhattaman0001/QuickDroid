@@ -1,4 +1,4 @@
-package com.example.moviemagnet.adapter
+package com.example.moviemagnet.ui.adapter
 
 import android.annotation.*
 import android.content.*
@@ -9,6 +9,7 @@ import android.widget.*
 import androidx.lifecycle.*
 import androidx.recyclerview.widget.*
 import com.example.moviemagnet.*
+import com.example.moviemagnet.data.db.entity.ResponseModel
 import com.example.moviemagnet.databinding.*
 import com.example.moviemagnet.model.*
 import com.example.moviemagnet.util.*
@@ -101,12 +102,12 @@ class SavedFileAdapter(
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SavedFileAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         binding = FileItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: SavedFileAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val file = files[position]
         holder.bind(file, position)
     }
