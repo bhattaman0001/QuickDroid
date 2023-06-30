@@ -49,10 +49,11 @@ class HistoryAdapter(
             binding.historyType.text = history.queryType
             binding.searchIcon.setOnClickListener {
                 if (binding.historyTxt.text != "") {
-                    val intent = Intent(context, FileListActivity::class.java)
-                    intent.putExtra("query_name", history.queryName)
-                    intent.putExtra("type_of_single_file_selected", history.queryType)
-                    context.startActivity(intent)
+                    Intent(context, FileListActivity::class.java).apply {
+                        putExtra("query_name", history.queryName)
+                        putExtra("type_of_single_file_selected", history.queryType)
+                        context.startActivity(this)
+                    }
                 } else {
                     Snackbar.make(
                         binding.root,

@@ -5,7 +5,6 @@ import android.annotation.SuppressLint
 import android.content.*
 import android.content.pm.*
 import android.os.*
-import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.appcompat.app.*
@@ -16,7 +15,10 @@ import com.example.moviemagnet.databinding.*
 import com.example.moviemagnet.repository.*
 import com.example.moviemagnet.util.*
 import com.google.android.material.snackbar.*
-import java.io.File
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.analytics.ktx.logEvent
+import com.google.firebase.ktx.Firebase
 
 
 class MainActivity : AppCompatActivity() {
@@ -27,6 +29,7 @@ class MainActivity : AppCompatActivity() {
     var query_name: String = ""
     private lateinit var repository: Repository
     private lateinit var downloadMediaButton: Button
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,11 +39,14 @@ class MainActivity : AppCompatActivity() {
         /*
         createApplicationFolder()
         */
+        firebaseAnalytics = Firebase.analytics
+
         downloadMediaButton = binding.downloadMedia
         downloadMediaButton.setOnClickListener {
-            val intent = Intent(this, DownloadedMediaActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(intent)
+            Intent(this, DownloadedMediaActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                startActivity(this)
+            }
         }
         repository = Repository(HistoryDatabase(this))
         type_of_file_array = resources.getStringArray(R.array.spinner_options)
@@ -53,7 +59,8 @@ class MainActivity : AppCompatActivity() {
             ) {
                 if (position == 0) type_of_single_file_selected = ""
                 if (position >= 1) type_of_single_file_selected =
-                    type_of_file_array[position]/*Log.d("is_this_ok", "the selected type is --> $type_of_file_selected")*/
+                    type_of_file_array[position]
+                /*Log.d("is_this_ok", "the selected type is --> $type_of_file_selected")*/
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -66,13 +73,18 @@ class MainActivity : AppCompatActivity() {
                     this, Manifest.permission.INTERNET
                 ) == PackageManager.PERMISSION_GRANTED
             ) {
+                firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_ITEM) {
+                    param(FirebaseAnalytics.Param.CONTENT_TYPE, "button")
+                    param(FirebaseAnalytics.Param.ITEM_ID, "Find Your File Button")
+                }
                 query_name =
                     binding.queryName.text.toString()/*Log.d("is_this_ok", "query name --> $query_name")*/
                 if (query_name != "") {
-                    val intent = Intent(this, FileListActivity::class.java)
-                    intent.putExtra("query_name", query_name)
-                    intent.putExtra("type_of_single_file_selected", type_of_single_file_selected)
-                    startActivity(intent)
+                    Intent(this, FileListActivity::class.java).apply {
+                        putExtra("query_name", "query_name")
+                        putExtra("type_of_single_file_selected", type_of_single_file_selected)
+                        startActivity(this)
+                    }
                 } else {
                     Snackbar.make(
                         binding.root, "File name must not be empty", Snackbar.LENGTH_SHORT
@@ -137,16 +149,24 @@ class MainActivity : AppCompatActivity() {
             }
 
             R.id.go_to_saved_file -> {
-                val intent = Intent(this, SavedFilesActivity::class.java)
+                /*val intent = Intent(this, SavedFilesActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                startActivity(intent)
+                startActivity(intent)*/
+                Intent(this, SavedFilesActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                    startActivity(this)
+                }
                 return true
             }
 
             R.id.go_to_history -> {
-                val intent = Intent(this, HistoryActivity::class.java)
+                /*val intent = Intent(this, HistoryActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                startActivity(intent)
+                startActivity(intent)*/
+                Intent(this, HistoryActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                    startActivity(this)
+                }
                 return true
             }
 

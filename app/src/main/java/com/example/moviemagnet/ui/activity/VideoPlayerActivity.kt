@@ -106,8 +106,9 @@ class VideoPlayerActivity : AppCompatActivity(), MediaController.MediaPlayerCont
 
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
-        val intent = Intent(this, DownloadedMediaActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        startActivity(intent)
+        Intent(this, DownloadedMediaActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(this)
+        }
     }
 }

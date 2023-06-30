@@ -50,6 +50,7 @@ class DownloadedMediaActivity : AppCompatActivity() {
             videoAdapter = VideoAdapter(this@DownloadedMediaActivity, videos)
             recyclerView.adapter = videoAdapter
         }
+        binding.progressBar.visibility = GONE
     }
 
     private fun getDownloadedVideos(): List<Video> {
@@ -65,13 +66,7 @@ class DownloadedMediaActivity : AppCompatActivity() {
                     val bMap = ThumbnailUtils.createVideoThumbnail(
                         file.absolutePath, MediaStore.Video.Thumbnails.MICRO_KIND
                     )
-                    val video = Video(
-                        file.name,
-                        file.path,
-                        bMap,
-                        lastModified,
-                        size
-                    )
+                    val video = Video(file.name, file.path, bMap, lastModified, size)
                     videos.add(video)
                 }
             }

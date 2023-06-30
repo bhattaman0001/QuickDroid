@@ -3,6 +3,7 @@ package com.example.moviemagnet.ui.activity
 import android.content.*
 import android.os.*
 import android.view.*
+import android.view.View.GONE
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.widget.*
@@ -31,17 +32,18 @@ class SavedFilesActivity : AppCompatActivity(), SavedFileAdapter.OnDeleteClickLi
         repository = Repository(SavedFileRoomDatabase(this))
         val fileLiveData = repository.responseGetAllFile()
         recyclerView = binding.rvSavedFile
-        fileLiveData?.observe(this) {
+        fileLiveData.observe(this) {
             if (it.isNullOrEmpty()) {
-                binding.rvSavedFile.visibility = INVISIBLE
+                binding.rvSavedFile.visibility = GONE
                 binding.noSavedFile.visibility = VISIBLE
             } else {
                 binding.rvSavedFile.visibility = VISIBLE
-                binding.noSavedFile.visibility = INVISIBLE
+                binding.noSavedFile.visibility = GONE
                 recyclerView.layoutManager = LinearLayoutManager(this)
                 savedFileAdapter = SavedFileAdapter(fileLiveData, this, this)
                 recyclerView.adapter = savedFileAdapter
             }
+            binding.progressBar.visibility = GONE
         }
     }
 
@@ -53,9 +55,10 @@ class SavedFilesActivity : AppCompatActivity(), SavedFileAdapter.OnDeleteClickLi
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.nav_home -> {
-                val intent = Intent(this, MainActivity::class.java)
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
-                startActivity(intent)
+                Intent(this, MainActivity::class.java).apply {
+                    addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+                    startActivity(this)
+                }
                 finishAffinity()
                 return true
             }

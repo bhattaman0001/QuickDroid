@@ -17,14 +17,15 @@ class VideoAdapter(private val context: Context, private val videos: List<Video>
 
     inner class ViewHolder(private val binding: ItemVideoBinding) :
         RecyclerView.ViewHolder(binding.root) {
-
         fun bind(video: Video) {
             /*Glide.with(binding.root).load(video.thumbnailPath).into(binding.actionImage)*/
             binding.root.setOnClickListener {
-                val intent = Intent(context, VideoPlayerActivity::class.java)
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                intent.putExtra("path", video.path)
-                context.startActivity(intent)
+                Intent(context, VideoPlayerActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                    flags = Intent.FLAG_ACTIVITY_NO_HISTORY
+                    putExtra("path", video.path)
+                    context.startActivity(this)
+                }
             }
             binding.actionImage.setImageBitmap(video.image)
             binding.title.text = video.title

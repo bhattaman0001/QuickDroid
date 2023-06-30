@@ -3,6 +3,8 @@ package com.example.moviemagnet.ui.activity
 import android.content.*
 import android.os.*
 import android.view.*
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.widget.*
 import androidx.appcompat.app.*
 import androidx.recyclerview.widget.*
@@ -30,18 +32,19 @@ class HistoryActivity : AppCompatActivity(), HistoryAdapter.OnDeleteClickListene
         setContentView(view)
         repository = Repository(HistoryDatabase(this))
         val historyLiveData = repository.historyGetAllHistory()
-        historyLiveData?.observe(this) {
+        historyLiveData.observe(this) {
             if (it.isNullOrEmpty()) {
-                binding.rvHistorySearch.visibility = View.INVISIBLE
-                binding.noHistorySearch.visibility = View.VISIBLE
+                binding.rvHistorySearch.visibility = GONE
+                binding.noHistorySearch.visibility = VISIBLE
             } else {
-                binding.rvHistorySearch.visibility = View.VISIBLE
-                binding.noHistorySearch.visibility = View.INVISIBLE
+                binding.rvHistorySearch.visibility = VISIBLE
+                binding.noHistorySearch.visibility = GONE
                 recyclerView = binding.rvHistorySearch
                 recyclerView.layoutManager = LinearLayoutManager(this)
                 historyFileAdapter = HistoryAdapter(historyLiveData, this, this)
                 recyclerView.adapter = historyFileAdapter
             }
+            binding.progressBar.visibility = GONE
         }
     }
 
@@ -74,9 +77,10 @@ class HistoryActivity : AppCompatActivity(), HistoryAdapter.OnDeleteClickListene
 
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
-        val intent = Intent(this, MainActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        startActivity(intent)
+        Intent(this, MainActivity::class.java).apply {
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(this)
+        }
     }
 
     override fun onDeleteClick(history: HistoryModel) {

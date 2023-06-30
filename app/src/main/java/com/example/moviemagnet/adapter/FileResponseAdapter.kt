@@ -35,9 +35,10 @@ class FileResponseAdapter(
                 if (response?.file_size != "") response?.file_size else "No Size"
             val url = response?.file_link
             binding.downloadLink.setOnClickListener {
-                val intent = Intent(Intent.ACTION_VIEW)
-                intent.data = Uri.parse(url)
-                context.startActivity(intent)
+                Intent(Intent.ACTION_VIEW).apply {
+                    data = Uri.parse(url)
+                    context.startActivity(this)
+                }
             }
             binding.numberId.text = "${position + 1}"
             binding.saveYourFile.setOnClickListener {
@@ -52,40 +53,44 @@ class FileResponseAdapter(
             }
             binding.deleteYourFile.visibility = GONE
             binding.shareFile.setOnClickListener {
-                val shareIntent = Intent(Intent.ACTION_SEND)
-                shareIntent.type = "text/plain"
-                shareIntent.putExtra(Intent.EXTRA_TEXT, Constants.message + url)
-                context.startActivity(Intent.createChooser(shareIntent, "Share via"))
+                Intent(Intent.ACTION_SEND).apply {
+                    type = "text/plain"
+                    putExtra(Intent.EXTRA_TEXT, Constants.message + url)
+                    context.startActivity(Intent.createChooser(this, "Share via"))
+                }
             }
             binding.whatsappShare.setOnClickListener {
-                val shareIntent = Intent(Intent.ACTION_SEND)
-                shareIntent.type = "text/plain"
-                shareIntent.setPackage("com.whatsapp")
-                shareIntent.putExtra(Intent.EXTRA_TEXT, Constants.message + url)
                 try {
-                    context.startActivity(shareIntent)
+                    Intent(Intent.ACTION_SEND).apply {
+                        type = "text/plain"
+                        setPackage("com.whatsapp")
+                        putExtra(Intent.EXTRA_TEXT, Constants.message + url)
+                        context.startActivity(this)
+                    }
                 } catch (ex: ActivityNotFoundException) {
                     Toast.makeText(context, "Whatsapp is not installed", Toast.LENGTH_SHORT).show()
                 }
             }
             binding.instagramShare.setOnClickListener {
-                val shareIntent = Intent(Intent.ACTION_SEND)
-                shareIntent.type = "text/plain"
-                shareIntent.putExtra(Intent.EXTRA_TEXT, Constants.message + url)
-                shareIntent.setPackage("com.instagram.android")
                 try {
-                    context.startActivity(shareIntent)
+                    Intent(Intent.ACTION_SEND).apply {
+                        type = "text/plain"
+                        putExtra(Intent.EXTRA_TEXT, Constants.message + url)
+                        setPackage("com.instagram.android")
+                        context.startActivity(this)
+                    }
                 } catch (ex: ActivityNotFoundException) {
                     Toast.makeText(context, "Instagram is not installed", Toast.LENGTH_SHORT).show()
                 }
             }
             binding.telegramShare.setOnClickListener {
-                val shareIntent = Intent(Intent.ACTION_SEND)
-                shareIntent.type = "text/plain"
-                shareIntent.putExtra(Intent.EXTRA_TEXT, Constants.message + url)
-                shareIntent.setPackage("org.telegram.messenger")
                 try {
-                    context.startActivity(shareIntent)
+                    Intent(Intent.ACTION_SEND).apply {
+                        type = "text/plain"
+                        putExtra(Intent.EXTRA_TEXT, Constants.message + url)
+                        setPackage("org.telegram.messenger")
+                        context.startActivity(this)
+                    }
                 } catch (ex: ActivityNotFoundException) {
                     Toast.makeText(context, "Telegram is not installed", Toast.LENGTH_SHORT).show()
                 }

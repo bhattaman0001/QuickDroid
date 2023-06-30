@@ -18,7 +18,7 @@ import java.io.File
 object Constants {
     const val BASE_URL = "https://filepursuit.p.rapidapi.com/"
     const val message =
-        "Thanks for using our application, below is the link of the file that you are trying to send to this beautiful person\n\n"
+        "Thanks for using our application, below is the link of the file\n\n"
     const val folderName = "UltimateFetch"
 
     /*

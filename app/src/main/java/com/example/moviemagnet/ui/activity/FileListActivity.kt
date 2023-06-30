@@ -26,8 +26,8 @@ import kotlinx.coroutines.*
 class FileListActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityFileListBinding
-    var type_of_single_file_selected: String = ""
-    var query_name: String = ""
+    private var type_of_single_file_selected: String = ""
+    private var query_name: String = ""
     private lateinit var recyclerViewFileList: RecyclerView
     private lateinit var adapter: FileResponseAdapter
     private lateinit var repository: Repository
@@ -114,16 +114,18 @@ class FileListActivity : AppCompatActivity() {
 
         inflate.findViewById<TextView>(R.id.go_to_home)?.setOnClickListener {
             dialog.dismiss()
-            val intent = Intent(this, MainActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
-            startActivity(intent)
+            Intent(this, MainActivity::class.java).apply {
+                addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+                startActivity(this)
+            }
             finishAffinity()
         }
 
         inflate.findViewById<TextView>(R.id.see_saved_files)?.setOnClickListener {
             dialog.dismiss()
-            val intent = Intent(this, SavedFilesActivity::class.java)
-            startActivity(intent)
+            Intent(this, SavedFilesActivity::class.java).apply {
+                startActivity(this)
+            }
         }
 
         inflate.findViewById<TextView>(R.id.cancel_bottom_sheet)?.setOnClickListener {
@@ -147,9 +149,10 @@ class FileListActivity : AppCompatActivity() {
             }
 
             R.id.nav_home -> {
-                val intent = Intent(this, MainActivity::class.java)
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
-                startActivity(intent)
+                Intent(this, MainActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NO_HISTORY
+                    startActivity(this)
+                }
                 finishAffinity()
                 return true
             }
@@ -165,9 +168,10 @@ class FileListActivity : AppCompatActivity() {
             }
 
             R.id.go_to_saved_file -> {
-                val intent = Intent(this, SavedFilesActivity::class.java)
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                startActivity(intent)
+                Intent(this, SavedFilesActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                    startActivity(this)
+                }
                 return true
             }
 
