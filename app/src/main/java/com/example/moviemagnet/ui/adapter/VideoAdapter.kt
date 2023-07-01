@@ -4,14 +4,16 @@ import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.example.moviemagnet.databinding.ItemVideoBinding
 import com.example.moviemagnet.model.Video
 import com.example.moviemagnet.ui.activity.VideoPlayerActivity
 
-class VideoAdapter(private val context: Context, private val videos: List<Video>) :
-    RecyclerView.Adapter<VideoAdapter.ViewHolder>() {
+class VideoAdapter(
+    private val context: Context,
+    private val videosLiveData: LiveData<List<Video>>
+) : RecyclerView.Adapter<VideoAdapter.ViewHolder>() {
 
     private lateinit var binding: ItemVideoBinding
 
@@ -40,13 +42,12 @@ class VideoAdapter(private val context: Context, private val videos: List<Video>
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val video = videos[position]
-        holder.bind(video)
+        videosLiveData.observeForever { videos ->
+            holder.bind(videos[position])
+        }
     }
 
     override fun getItemCount(): Int {
-        return videos.size
+        return videosLiveData.value?.size ?: 0
     }
-
-
 }

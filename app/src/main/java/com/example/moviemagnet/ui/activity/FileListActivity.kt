@@ -5,10 +5,11 @@ import android.content.*
 import android.os.*
 import android.util.*
 import android.view.*
-import android.view.View.INVISIBLE
+import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.*
 import androidx.appcompat.app.*
+import com.example.moviemagnet.BuildConfig
 import androidx.lifecycle.*
 import androidx.recyclerview.widget.*
 import com.example.moviemagnet.*
@@ -58,6 +59,8 @@ class FileListActivity : AppCompatActivity() {
                     parameter2 = typeOfSingleFileSelected
                 )
 
+                Log.d("is_this_ok", "response -> $response | response data -> ${response.body()}")
+
                 val responseTime =
                     (response.raw().receivedResponseAtMillis - response.raw().sentRequestAtMillis).toDouble() / 1000.0
 
@@ -65,11 +68,21 @@ class FileListActivity : AppCompatActivity() {
                     "Your request took $responseTime seconds to find and display! Thanks"
                 binding.responseTime.isAllCaps = true
 
-                /*Log.d("is_this_ok", "response is --> $response | response success --> ${response.isSuccessful}")*/
                 Snackbar.make(view, "Response is ${response.body()?.status}", Snackbar.LENGTH_SHORT)
                     .show()
                 if (response.isSuccessful) {
                     val data = response.body()?.files_found
+
+                    runOnUiThread(Runnable {
+                        run {
+                            binding.shimmerFrameLayout.stopShimmer()
+                            binding.responseTime.visibility = VISIBLE
+                            binding.numberOfResults.visibility = VISIBLE
+                            binding.shimmerFrameLayout.visibility = GONE
+                            recyclerViewFileList.visibility = VISIBLE
+                        }
+                    })
+
                     binding.numberOfResults.text = "Total results : " + data?.size.toString()
                     binding.numberOfResults.isAllCaps = true
                     recyclerViewFileList.layoutManager = LinearLayoutManager(this@FileListActivity)
@@ -83,18 +96,11 @@ class FileListActivity : AppCompatActivity() {
                     repository.historyInsertOrUpdate(history)
 
                     recyclerViewFileList.adapter = adapter
-                    /*Log.d("is_this_ok", "data size --> ${data?.size}")
-                    Log.d("is_this_ok", "data  --> $data")*/
                 } else {
-                    /*Log.d("is_this_ok", "response is failed")*/
+                    binding.shimmerFrameLayout.visibility = GONE
                     Snackbar.make(view, "The response is failed", Snackbar.LENGTH_SHORT).show()
                 }
-                binding.progressBar.visibility = INVISIBLE
-                binding.responseTime.visibility = VISIBLE
-                binding.numberOfResults.visibility = VISIBLE
-                binding.divider.visibility = VISIBLE
             } catch (e: Exception) {
-                /*Log.d("is_this_ok", "exception is --> ${e.message}\n${e.localizedMessage}")*/
                 Snackbar.make(view, "Open your Internet", Snackbar.LENGTH_LONG).show()
                 e.printStackTrace()
             }
@@ -134,6 +140,16 @@ class FileListActivity : AppCompatActivity() {
         inflate.findViewById<TextView>(R.id.cancel_bottom_sheet)?.setOnClickListener {
             dialog.dismiss()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.shimmerFrameLayout.startShimmer()
+    }
+
+    override fun onPause() {
+        binding.shimmerFrameLayout.stopShimmer()
+        super.onPause()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

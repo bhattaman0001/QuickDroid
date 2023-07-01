@@ -2,14 +2,14 @@
     <!-- Background circle -->
     <item>
         <shape android:shape="oval">
-            <solid android:color="#F3F3F3" /> <!-- Replace with your desired background color -->
+            <solid android:color="@color/colorGrey" /> <!-- Replace with your desired background color -->
         </shape>
     </item>
 
     <!-- Shadow -->
     <item>
         <shape android:shape="oval">
-            <solid android:color="#F6F4F4" /> <!-- Replace with your desired shadow color -->
+            <solid android:color="#55ECE3E3" /> <!-- Replace with your desired shadow color -->
             <corners android:radius="50dp" /> <!-- Adjust the corner radius to half the width/height of the circular shape -->
         </shape>
     </item>

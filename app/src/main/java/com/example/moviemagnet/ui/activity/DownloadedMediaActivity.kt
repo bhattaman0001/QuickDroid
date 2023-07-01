@@ -10,6 +10,8 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moviemagnet.ui.adapter.VideoAdapter
@@ -40,24 +42,27 @@ class DownloadedMediaActivity : AppCompatActivity() {
             PackageManager.PERMISSION_GRANTED
         )
 
-        val videos = getDownloadedVideos()
-        if (videos.isEmpty()) {
-            binding.noDownloaded.visibility = VISIBLE
-            binding.downloadListRv.visibility = GONE
-        } else {
-            binding.noDownloaded.visibility = GONE
-            binding.downloadListRv.visibility = VISIBLE
-            videoAdapter = VideoAdapter(this@DownloadedMediaActivity, videos)
-            recyclerView.adapter = videoAdapter
+        val videosLiveData: LiveData<List<Video>> = getDownloadedVideos()
+        videosLiveData.observe(this) {
+            if (it.isNullOrEmpty()) {
+                binding.noDownloaded.visibility = VISIBLE
+                binding.downloadListRv.visibility = GONE
+            } else {
+                binding.noDownloaded.visibility = GONE
+                binding.downloadListRv.visibility = VISIBLE
+                videoAdapter = VideoAdapter(this@DownloadedMediaActivity, videosLiveData)
+                recyclerView.adapter = videoAdapter
+            }
         }
         binding.progressBar.visibility = GONE
     }
 
-    private fun getDownloadedVideos(): List<Video> {
-        val downloadsFolder =
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-        val files: Array<File> = downloadsFolder.listFiles()!!
+    private fun getDownloadedVideos(): LiveData<List<Video>> {
+        val videosLiveData = MutableLiveData<List<Video>>()
         val videos: MutableList<Video> = mutableListOf()
+        val downloadsFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+        val files: Array<File> = downloadsFolder.listFiles()!!
+
         files.let {
             for (file in it) {
                 if (isVideoFile(file.extension)) {
@@ -71,8 +76,8 @@ class DownloadedMediaActivity : AppCompatActivity() {
                 }
             }
         }
-
-        return videos
+        videosLiveData.value = videos
+        return videosLiveData
     }
 
     /*private fun getVideoThumbnailPath(videoPath: String): String? {

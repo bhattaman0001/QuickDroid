@@ -18,8 +18,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="visible" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/number_of_results"
@@ -33,42 +32,46 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/responseTime"
-        tools:visibility="visible" />
+        app:layout_constraintTop_toBottomOf="@id/responseTime" />
 
-    <com.google.android.material.divider.MaterialDivider
-        android:id="@+id/divider"
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmerFrameLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:dividerColor="#D2CBCB"
-        app:layout_constraintBottom_toTopOf="@id/file_list_rv"
+        android:layout_marginVertical="5dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        android:visibility="gone"
-        tools:visibility="visible"
-        app:layout_constraintTop_toBottomOf="@id/number_of_results" />
+        app:layout_constraintTop_toBottomOf="@id/number_of_results"
+        app:layout_constraintVertical_bias="0.5">
+
+        <!-- Adding 15 rows of placeholders -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <include layout="@layout/file_item_shimmer" />
+
+            <include layout="@layout/file_item_shimmer" />
+
+            <include layout="@layout/file_item_shimmer" />
+        </LinearLayout>
+    </com.facebook.shimmer.ShimmerFrameLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/file_list_rv"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginVertical="5dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/number_of_results"
         app:layout_constraintVertical_bias="0.5" />
-
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="?attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="@id/file_list_rv"
-        app:layout_constraintEnd_toEndOf="@id/file_list_rv"
-        app:layout_constraintStart_toStartOf="@id/file_list_rv"
-        app:layout_constraintTop_toTopOf="@id/file_list_rv" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
