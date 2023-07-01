@@ -51,7 +51,6 @@ class FileResponseAdapter(
                 Constants.showInsertToast(context)
                 binding.saveYourFile.isEnabled = false
             }
-            binding.deleteYourFile.visibility = GONE
             binding.shareFile.setOnClickListener {
                 Intent(Intent.ACTION_SEND).apply {
                     type = "text/plain"

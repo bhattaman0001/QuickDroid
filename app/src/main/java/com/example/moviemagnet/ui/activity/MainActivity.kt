@@ -78,10 +78,11 @@ class MainActivity : AppCompatActivity() {
                     param(FirebaseAnalytics.Param.ITEM_ID, "Find Your File Button")
                 }
                 queryName =
-                    binding.queryName.text.toString()/*Log.d("is_this_ok", "query name --> $query_name")*/
+                    binding.queryName.text.toString()
+                /*Log.d("is_this_ok", "query name --> $query_name")*/
                 if (queryName != "") {
                     Intent(this, FileListActivity::class.java).apply {
-                        putExtra("query_name", "query_name")
+                        putExtra("query_name", queryName)
                         putExtra("type_of_single_file_selected", typeOfSingleFileSelected)
                         startActivity(this)
                     }

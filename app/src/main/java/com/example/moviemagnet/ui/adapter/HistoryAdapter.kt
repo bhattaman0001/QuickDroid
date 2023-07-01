@@ -47,7 +47,7 @@ class HistoryAdapter(
             this.history = history
             binding.historyTxt.text = history.queryName
             binding.historyType.text = history.queryType
-            binding.searchIcon.setOnClickListener {
+            binding.root.setOnClickListener {
                 if (binding.historyTxt.text != "") {
                     Intent(context, FileListActivity::class.java).apply {
                         putExtra("query_name", history.queryName)

@@ -41,5 +41,6 @@
     <string name="show_downloaded_media">Show Downloaded Media</string>
     <string name="demo_code_1">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis eleifend sem nec lacus iaculis, in scelerisque odio rutrum. Vivamus vulputate augue ac dolor rutrum, nec cursus erat pulvinar.</string>
     <string name="demo_code_2">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis eleifend sem nec lacus iaculis, in scelerisque odio rutrum.</string>
+    <string name="search">Search</string>
 
 </resources>

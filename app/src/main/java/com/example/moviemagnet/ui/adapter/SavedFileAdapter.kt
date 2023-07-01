@@ -6,6 +6,7 @@ import android.net.*
 import android.view.*
 import android.view.View.GONE
 import android.widget.*
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.*
 import androidx.recyclerview.widget.*
 import com.example.moviemagnet.*
@@ -51,8 +52,9 @@ class SavedFileAdapter(
                 }
             }
             binding.numberId.text = "${position + 1}"
-            binding.saveYourFile.visibility = GONE
-            binding.deleteYourFile.setOnClickListener {
+            binding.saveYourFile.backgroundTintList = ContextCompat.getColorStateList(context, R.color.red)
+            binding.saveYourFile.text = "Delete"
+            binding.saveYourFile.setOnClickListener {
                 onDeleteClickListener.onDeleteClick(file)
                 Constants.showDeleteToast(context)
             }

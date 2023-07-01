@@ -60,6 +60,7 @@ class FileListActivity : AppCompatActivity() {
 
                 val responseTime =
                     (response.raw().receivedResponseAtMillis - response.raw().sentRequestAtMillis).toDouble() / 1000.0
+
                 binding.responseTime.text =
                     "Your request took $responseTime seconds to find and display! Thanks"
                 binding.responseTime.isAllCaps = true
