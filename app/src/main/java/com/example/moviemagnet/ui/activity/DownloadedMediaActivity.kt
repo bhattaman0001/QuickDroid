@@ -1,5 +1,6 @@
 package com.example.moviemagnet.ui.activity
 
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.ThumbnailUtils
 import android.os.Bundle
@@ -65,17 +66,16 @@ class DownloadedMediaActivity : AppCompatActivity() {
 
         files.let {
             for (file in it) {
-                if (isVideoFile(file.extension)) {
+                if (isFile(file.extension)) {
                     val size = getFileSizeInGB(file)
                     val lastModified = getFileLastModifiedDateTime(file)
-                    val bMap = ThumbnailUtils.createVideoThumbnail(
-                        file.absolutePath, MediaStore.Video.Thumbnails.MICRO_KIND
-                    )
+                    val bMap = ThumbnailUtils.createVideoThumbnail(file.absolutePath, MediaStore.Video.Thumbnails.MICRO_KIND)
                     val video = Video(file.name, file.path, bMap, lastModified, size)
                     videos.add(video)
                 }
             }
         }
+
         videosLiveData.value = videos
         return videosLiveData
     }
@@ -97,9 +97,13 @@ class DownloadedMediaActivity : AppCompatActivity() {
         return thumbnailFile.absolutePath
     }*/
 
-    private fun isVideoFile(extension: String): Boolean {
+    private fun isFile(extension: String): Boolean {
         return when (extension.toLowerCase(Locale.ROOT)) {
-            "mp4", "avi", "mkv", "wmv", "mov", "flv", "webm", "mpeg", "mpg" -> true
+            "mp4", "avi", "mkv", "wmv", "mov", "flv", "webm", "3gp", "m4v", "mpeg", "mpg" -> true
+            "mp3", "wav", "flac", "aac", "wma", "ogg", "m4a", "opus", "aiff" -> true
+            "epub", "pdf", "mobi", "azw", "djvu", "html", "txt" -> true
+            "apk", "ipa", "exe", "dmg", "appx", "xap", "jar", "deb" -> true
+            "zip", "rar", "7z", "tar.gz", "tar", "gz", "bz2", "xz" -> true
             else -> false
         }
     }
@@ -115,7 +119,19 @@ class DownloadedMediaActivity : AppCompatActivity() {
         val fileSizeInKB = fileSizeInBytes / 1024
         val fileSizeInMB = fileSizeInKB / 1024
         val fileSizeInGB = fileSizeInMB / 1024.0
-        return "%.2f GB".format(fileSizeInGB)
+        return if (fileSizeInGB != 0.00) "%.2f GB".format(fileSizeInGB) else "%.2f MB".format(
+            fileSizeInMB
+        )
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        Intent(this, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(this)
+            finishAffinity()
+        }
     }
 
 }

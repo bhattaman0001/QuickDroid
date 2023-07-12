@@ -45,7 +45,6 @@ class FileListActivity : AppCompatActivity() {
             queryName = intent.getStringExtra("query_name").toString()
             typeOfSingleFileSelected =
                 intent.getStringExtra("type_of_single_file_selected").toString()
-            /*Log.d("is_this_ok", "query_name --> $query_name | type_of_query --> $type_of_single_file_selected")*/
         }
 
         val history = HistoryModel(queryName, typeOfSingleFileSelected)
@@ -58,12 +57,7 @@ class FileListActivity : AppCompatActivity() {
                     parameter1 = queryName,
                     parameter2 = typeOfSingleFileSelected
                 )
-
-                Log.d("is_this_ok", "response -> $response | response data -> ${response.body()}")
-
-                val responseTime =
-                    (response.raw().receivedResponseAtMillis - response.raw().sentRequestAtMillis).toDouble() / 1000.0
-
+                val responseTime = (response.raw().receivedResponseAtMillis - response.raw().sentRequestAtMillis).toDouble() / 1000.0
                 binding.responseTime.text =
                     "Your request took $responseTime seconds to find and display! Thanks"
                 binding.responseTime.isAllCaps = true

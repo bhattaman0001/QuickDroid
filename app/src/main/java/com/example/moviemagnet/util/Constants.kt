@@ -40,6 +40,25 @@ object Constants {
         var fileList = fileListDownloadDir.listFiles()
     */
 
+
+    /*private fun createApplicationFolder() {
+        val folderPath =
+            applicationContext.filesDir.absolutePath + File.separator + Constants.folderName
+        val folder = File(folderPath)
+        if (!folder.exists()) {
+            val created = folder.mkdirs()
+            if (created) {
+                Constants.showFolderCreatedToast(this)
+            } else {
+                Constants.showFolderNotCreatedToast(this)
+            }
+        } else {
+            Constants.checkIfFolderExists(this)
+        }
+    }*/
+
+
+
     fun saveFile(file: ResponseModel, context: Context) = CoroutineScope(Dispatchers.IO).launch {
         SavedFileRoomDatabase.invoke(context).getFileDaa().insertFile(file)
     }

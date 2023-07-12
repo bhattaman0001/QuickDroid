@@ -7,13 +7,15 @@ import com.example.moviemagnet.data.db.database.HistoryDatabase
 import com.example.moviemagnet.data.db.database.SavedFileRoomDatabase
 import com.example.moviemagnet.data.db.entity.HistoryModel
 import com.example.moviemagnet.data.db.entity.ResponseModel
+import com.example.moviemagnet.model.FileFoundModel
+import retrofit2.Response
 
 class Repository(
     private val db: RoomDatabase
 ) {
 
-    suspend fun getFileFound(searchQuery: String, searchType: String) {
-        RetrofitHelper.responseApiInterface.getData(
+    suspend fun getFileFound(searchQuery: String, searchType: String): Response<FileFoundModel> {
+        return RetrofitHelper.responseApiInterface.getData(
             header1 = BuildConfig.header1,
             header2 = BuildConfig.header2,
             parameter1 = searchQuery,

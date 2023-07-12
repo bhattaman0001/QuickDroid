@@ -12,38 +12,59 @@ import com.example.moviemagnet.model.FileFoundModel
 import com.example.moviemagnet.data.db.entity.HistoryModel
 import com.example.moviemagnet.data.db.entity.ResponseModel
 import com.example.moviemagnet.util.Resource
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import retrofit2.Response
+import java.io.IOException
 
 class MainViewModel(
     val app: Application, private val repository: Repository
 ) : AndroidViewModel(app) {
-    /*private val responseLiveData: MutableLiveData<Resource<FileFoundModel>> = MutableLiveData()
-    private val history: MutableLiveData<Resource<HistoryModel>> = MutableLiveData()
-    private val savedFile: MutableLiveData<Resource<ResponseModel>> = MutableLiveData()*/
 
-    /*private suspend fun getFileResponse(searchQuery: String, searchType: String) {
-        responseLiveData.postValue(Resource.Loading())
+    private val getFiles: MutableLiveData<Resource<FileFoundModel>> = MutableLiveData()
+    var getFilesResponse: FileFoundModel? = null
+
+    val gFiles: LiveData<Resource<FileFoundModel>>
+        get() = getFiles
+
+    fun getFiles(searchQuery: String, searchType: String) = viewModelScope.launch {
+        getFilesCall(searchQuery, searchType)
+    }
+
+
+
+    private suspend fun getFilesCall(searchQuery: String, searchType: String) {
+        getFiles.postValue(Resource.Loading())
         try {
             if (isOnline()) {
                 val response = repository.getFileFound(searchQuery, searchType)
-                responseLiveData.postValue(handleResponseFile(response))
+                getFiles.postValue(handleFileCall(response))
             } else {
-                responseLiveData.postValue(Resource.Error("No Internet Connection Available"))
+                getFiles.postValue(Resource.Error("No Internet Connection Available"))
             }
         } catch (t: Throwable) {
             when (t) {
-                is IOException -> responseLiveData.postValue(Resource.Error("Network Failure"))
-                else -> responseLiveData.postValue(Resource.Error("Conversion Error"))
+                is IOException -> getFiles.postValue(Resource.Error("Network Failure"))
+                else -> getFiles.postValue(Resource.Error("Conversion Error"))
             }
         }
     }
 
-    private fun handleResponseFile(response: Response<FileFoundModel>): Resource<FileFoundModel> {
+    private fun handleFileCall(response: Response<FileFoundModel>): Resource<FileFoundModel> {
         if (response.isSuccessful) {
-
+            response.body()?.let {
+                if (getFilesResponse == null) {
+                    getFilesResponse = it
+                } else {
+                    val oldFiles = getFilesResponse?.files_found
+                    val newFiles = it.files_found
+                    oldFiles?.addAll(newFiles)
+                }
+                return Resource.Success(getFilesResponse ?: it)
+            }
         }
         return Resource.Error(response.message())
-    }*/
-
+    }
 
 
     private fun isOnline(): Boolean {
@@ -65,7 +86,5 @@ class MainViewModel(
         }
         return false
     }
-
-    /*val responseFile: LiveData<Resource<FileFoundModel>> get() = responseLiveData*/
 
 }

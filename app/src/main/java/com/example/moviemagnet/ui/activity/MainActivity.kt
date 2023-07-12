@@ -39,73 +39,83 @@ class MainActivity : AppCompatActivity() {
         /*
         createApplicationFolder()
         */
-        firebaseAnalytics = Firebase.analytics
 
-        downloadMediaButton = binding.downloadMedia
-        downloadMediaButton.setOnClickListener {
-            Intent(this, DownloadedMediaActivity::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                startActivity(this)
-            }
-        }
-        repository = Repository(HistoryDatabase(this))
-        typeOfFileArray = resources.getStringArray(R.array.spinner_options)
-        val adapter =
-            ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, typeOfFileArray)
-        binding.typeOfFile.adapter = adapter
-        binding.typeOfFile.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?, view: View?, position: Int, id: Long
-            ) {
-                if (position == 0) typeOfSingleFileSelected = ""
-                if (position >= 1) typeOfSingleFileSelected =
-                    typeOfFileArray[position]
-                /*Log.d("is_this_ok", "the selected type is --> $type_of_file_selected")*/
-            }
+        try {
+            firebaseAnalytics = Firebase.analytics
 
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                // todo: do something when nothing is selected
-            }
-        }
-
-        binding.findYourFile.setOnClickListener {
-            if (ContextCompat.checkSelfPermission(
-                    this, Manifest.permission.INTERNET
-                ) == PackageManager.PERMISSION_GRANTED
-            ) {
-                firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_ITEM) {
-                    param(FirebaseAnalytics.Param.CONTENT_TYPE, "button")
-                    param(FirebaseAnalytics.Param.ITEM_ID, "Find Your File Button")
+            downloadMediaButton = binding.downloadMedia
+            downloadMediaButton.setOnClickListener {
+                Intent(this, DownloadedMediaActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                    startActivity(this)
                 }
-                queryName =
-                    binding.queryName.text.toString()
-                /*Log.d("is_this_ok", "query name --> $query_name")*/
-                if (queryName != "") {
-                    Intent(this, FileListActivity::class.java).apply {
-                        putExtra("query_name", queryName)
-                        putExtra("type_of_single_file_selected", typeOfSingleFileSelected)
-                        startActivity(this)
+            }
+            repository = Repository(HistoryDatabase(this))
+            typeOfFileArray = resources.getStringArray(R.array.spinner_options)
+            val adapter =
+                ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, typeOfFileArray)
+            binding.typeOfFile.adapter = adapter
+            binding.typeOfFile.onItemSelectedListener =
+                object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(
+                        parent: AdapterView<*>?, view: View?, position: Int, id: Long
+                    ) {
+                        if (position == 0) typeOfSingleFileSelected = ""
+                        if (position >= 1) typeOfSingleFileSelected =
+                            typeOfFileArray[position]
+                        /*Log.d("is_this_ok", "the selected type is --> $type_of_file_selected")*/
                     }
-                } else {
-                    Snackbar.make(
-                        binding.root, "File name must not be empty", Snackbar.LENGTH_SHORT
-                    ).show()
+
+                    override fun onNothingSelected(parent: AdapterView<*>?) {
+                        // todo: do something when nothing is selected
+                    }
                 }
 
-                /*val searchQuery = query_name // Replace with the user-provided query
-                try {
-                    val intent = Intent(Intent.ACTION_VIEW)
-                    intent.data = Uri.parse("https://t.me/search?q=$searchQuery")
+            binding.findYourFile.setOnClickListener {
+                if (ContextCompat.checkSelfPermission(
+                        this, Manifest.permission.INTERNET
+                    ) == PackageManager.PERMISSION_GRANTED
+                ) {
+                    firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_ITEM) {
+                        param(FirebaseAnalytics.Param.CONTENT_TYPE, "button")
+                        param(FirebaseAnalytics.Param.ITEM_ID, "Find Your File Button")
+                    }
+                    queryName =
+                        binding.queryName.text.toString()
+                    /*Log.d("is_this_ok", "query name --> $query_name")*/
+                    if (queryName != "") {
+                        Intent(this, FileListActivity::class.java).apply {
+                            putExtra("query_name", queryName)
+                            putExtra("type_of_single_file_selected", typeOfSingleFileSelected)
+                            startActivity(this)
+                        }
+                    } else {
+                        Snackbar.make(
+                            binding.root, "File name must not be empty", Snackbar.LENGTH_SHORT
+                        ).show()
+                    }
 
-                    // Set the package name explicitly to ensure Telegram is used to handle the intent
-                    intent.setPackage("org.telegram.messenger")
-                    startActivity(intent)
-                } catch (e: ActivityNotFoundException) {
-                    // Telegram is not installed, handle this situation
-                    Toast.makeText(applicationContext, "Telegram is not installed", Toast.LENGTH_SHORT).show()
-                }*/
+                    /*val searchQuery = query_name // Replace with the user-provided query
+                    try {
+                        val intent = Intent(Intent.ACTION_VIEW)
+                        intent.data = Uri.parse("https://t.me/search?q=$searchQuery")
 
-            } else Snackbar.make(view, "Open your Internet", Snackbar.LENGTH_SHORT).show()
+                        // Set the package name explicitly to ensure Telegram is used to handle the intent
+                        intent.setPackage("org.telegram.messenger")
+                        startActivity(intent)
+                    } catch (e: ActivityNotFoundException) {
+                        // Telegram is not installed, handle this situation
+                        Toast.makeText(applicationContext, "Telegram is not installed", Toast.LENGTH_SHORT).show()
+                    }*/
+
+                } else Snackbar.make(view, "Open your Internet", Snackbar.LENGTH_SHORT).show()
+            }
+        } catch (e: Exception) {
+            /*firebaseAnalytics.logEvent(FirebaseAnalytics.Event.APP) {
+                param(FirebaseAnalytics.Param.ITEM_ID, "exception_id")
+                param(FirebaseAnalytics.Param.ITEM_NAME, "exception_name")
+                param(FirebaseAnalytics.Param.CONTENT_TYPE, "exception")
+            }*/
         }
     }
 
