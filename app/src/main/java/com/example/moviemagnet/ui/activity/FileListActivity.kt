@@ -25,6 +25,7 @@ import com.example.moviemagnet.util.*
 import com.google.android.material.bottomsheet.*
 import com.google.android.material.snackbar.*
 import kotlinx.coroutines.*
+import timber.log.Timber
 
 class FileListActivity : AppCompatActivity() {
 
@@ -57,6 +58,9 @@ class FileListActivity : AppCompatActivity() {
                     parameter1 = queryName,
                     parameter2 = typeOfSingleFileSelected
                 )
+
+                Timber.tag("is_this_ok").d("response -> " + response.body())
+
                 val responseTime = (response.raw().receivedResponseAtMillis - response.raw().sentRequestAtMillis).toDouble() / 1000.0
                 binding.responseTime.text =
                     "Your request took $responseTime seconds to find and display! Thanks"

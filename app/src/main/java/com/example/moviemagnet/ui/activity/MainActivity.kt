@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.*
 import android.content.pm.*
 import android.os.*
+import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.appcompat.app.*
@@ -30,6 +31,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var repository: Repository
     private lateinit var downloadMediaButton: Button
     private lateinit var firebaseAnalytics: FirebaseAnalytics
+    private lateinit var actv: AutoCompleteTextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,15 +44,20 @@ class MainActivity : AppCompatActivity() {
 
         try {
             firebaseAnalytics = Firebase.analytics
-
+            actv = binding.queryName
             downloadMediaButton = binding.downloadMedia
             downloadMediaButton.setOnClickListener {
                 Intent(this, DownloadedMediaActivity::class.java).apply {
+                    Log.d("aman-demo", "clickedDMB1")
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                    Log.d("aman-demo", "clickedDMB2")
                     startActivity(this)
                 }
             }
             repository = Repository(HistoryDatabase(this))
+            /*val historyLiveData = repository.historyGetAllHistory()
+            val suggestionAdapter: ArrayAdapter<*> = ArrayAdapter<Any?>(this, android.R.layout.simple_list_item_1, historyLiveData)
+            actv.setAdapter(suggestionAdapter)*/
             typeOfFileArray = resources.getStringArray(R.array.spinner_options)
             val adapter =
                 ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, typeOfFileArray)

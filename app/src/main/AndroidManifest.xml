@@ -31,6 +31,7 @@
         <activity
             android:name=".ui.activity.DownloadedMediaActivity"
             android:exported="false"
+            android:parentActivityName=".ui.activity.MainActivity"
             android:label="Downloaded Video" />
         <activity
             android:name=".ui.activity.HistoryActivity"

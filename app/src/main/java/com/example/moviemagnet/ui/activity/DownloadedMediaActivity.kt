@@ -6,9 +6,11 @@ import android.media.ThumbnailUtils
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.util.Log
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.LiveData
@@ -31,6 +33,7 @@ class DownloadedMediaActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d("aman-demo", "clickedDMB3")
         binding = ActivityDownloadedMediaBinding.inflate(layoutInflater)
         val view: View = binding.root
         setContentView(view)
@@ -59,6 +62,7 @@ class DownloadedMediaActivity : AppCompatActivity() {
     }
 
     private fun getDownloadedVideos(): LiveData<List<Video>> {
+        Log.d("aman-demo", "clickedDMB4")
         val videosLiveData = MutableLiveData<List<Video>>()
         val videos: MutableList<Video> = mutableListOf()
         val downloadsFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
@@ -119,9 +123,13 @@ class DownloadedMediaActivity : AppCompatActivity() {
         val fileSizeInKB = fileSizeInBytes / 1024
         val fileSizeInMB = fileSizeInKB / 1024
         val fileSizeInGB = fileSizeInMB / 1024.0
-        return if (fileSizeInGB != 0.00) "%.2f GB".format(fileSizeInGB) else "%.2f MB".format(
-            fileSizeInMB
-        )
+        try {
+            return if (fileSizeInGB > 0.0) "%.2f GB".format(fileSizeInGB) else "%.2f MB".format(
+                fileSizeInMB
+            )
+        }catch (e: Exception){
+        }
+        return ""
     }
 
     override fun onBackPressed() {
