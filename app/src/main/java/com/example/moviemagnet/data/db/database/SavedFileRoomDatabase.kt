@@ -3,7 +3,7 @@ package com.example.moviemagnet.data.db.database
 import android.content.*
 import androidx.room.*
 import com.example.moviemagnet.data.db.dao.ResponseDao
-import com.example.moviemagnet.data.db.entity.ResponseModel
+import com.example.moviemagnet.model.ResponseModel
 
 @Database(entities = [ResponseModel::class], version = 1)
 abstract class SavedFileRoomDatabase : RoomDatabase() {

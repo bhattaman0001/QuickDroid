@@ -2,8 +2,7 @@ package com.example.moviemagnet.data.db.dao
 
 import androidx.lifecycle.*
 import androidx.room.*
-import com.example.moviemagnet.data.db.entity.HistoryModel
-import com.example.moviemagnet.model.*
+import com.example.moviemagnet.model.HistoryModel
 
 @Dao
 interface HistoryDao {

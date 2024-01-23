@@ -10,7 +10,7 @@ import com.example.moviemagnet.databinding.*
 import com.example.moviemagnet.model.*
 import com.example.moviemagnet.ui.activity.*
 import com.google.android.material.snackbar.*
-import com.example.moviemagnet.data.db.entity.HistoryModel
+import com.example.moviemagnet.model.HistoryModel
 
 
 @SuppressLint("NotifyDataSetChanged")
@@ -50,8 +50,8 @@ class HistoryAdapter(
             binding.root.setOnClickListener {
                 if (binding.historyTxt.text != "") {
                     Intent(context, FileListActivity::class.java).apply {
-                        putExtra("query_name", history.queryName)
-                        putExtra("type_of_single_file_selected", history.queryType)
+                        putExtra("queryName", history.queryName)
+                        putExtra("typeOfFileSelected", history.queryType)
                         context.startActivity(this)
                     }
                 } else {

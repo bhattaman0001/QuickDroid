@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">UltimateFetch</string>
+    <string name="app_name">QuickDroid</string>
 
     <string-array name="spinner_options">
         <item>Select file type</item>

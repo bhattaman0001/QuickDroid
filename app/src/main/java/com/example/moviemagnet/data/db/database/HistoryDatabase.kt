@@ -3,7 +3,7 @@ package com.example.moviemagnet.data.db.database
 import android.content.*
 import androidx.room.*
 import com.example.moviemagnet.data.db.dao.HistoryDao
-import com.example.moviemagnet.data.db.entity.HistoryModel
+import com.example.moviemagnet.model.HistoryModel
 
 @Database(entities = [HistoryModel::class], version = 1)
 abstract class HistoryDatabase : RoomDatabase() {

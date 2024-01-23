@@ -4,13 +4,12 @@ import android.annotation.*
 import android.content.*
 import android.net.*
 import android.view.*
-import android.view.View.GONE
 import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.*
 import androidx.recyclerview.widget.*
 import com.example.moviemagnet.*
-import com.example.moviemagnet.data.db.entity.ResponseModel
+import com.example.moviemagnet.model.ResponseModel
 import com.example.moviemagnet.databinding.*
 import com.example.moviemagnet.model.*
 import com.example.moviemagnet.util.*
@@ -19,7 +18,7 @@ import com.example.moviemagnet.util.*
 class SavedFileAdapter(
     fileData: LiveData<List<ResponseModel>>,
     private val context: Context,
-    private val onDeleteClickListener: OnDeleteClickListener
+    private val clickListener: onClickListener
 ) : RecyclerView.Adapter<SavedFileAdapter.ViewHolder>() {
 
     private var files: List<ResponseModel> = emptyList()
@@ -32,8 +31,9 @@ class SavedFileAdapter(
         }
     }
 
-    interface OnDeleteClickListener {
+    interface onClickListener {
         fun onDeleteClick(file: ResponseModel)
+        fun isVisible(isVisible: Boolean)
     }
 
     inner class ViewHolder(private val binding: FileItemBinding) :
@@ -55,7 +55,8 @@ class SavedFileAdapter(
             binding.saveYourFile.backgroundTintList = ContextCompat.getColorStateList(context, R.color.red)
             binding.saveYourFile.text = "Delete"
             binding.saveYourFile.setOnClickListener {
-                onDeleteClickListener.onDeleteClick(file)
+                clickListener.onDeleteClick(file)
+                clickListener.isVisible(true)
                 Constants.showDeleteToast(context)
             }
             binding.shareFile.setOnClickListener {

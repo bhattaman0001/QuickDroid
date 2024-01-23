@@ -1,49 +1,84 @@
 package com.example.moviemagnet.ui.activity
 
-import android.content.*
-import android.os.*
-import android.view.*
+import android.content.Intent
+import android.os.Bundle
+import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.widget.*
-import androidx.appcompat.app.*
-import androidx.recyclerview.widget.*
-import com.example.moviemagnet.*
-import com.example.moviemagnet.data.db.database.SavedFileRoomDatabase
-import com.example.moviemagnet.data.db.entity.ResponseModel
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.moviemagnet.FileApplication
+import com.example.moviemagnet.R
+import com.example.moviemagnet.model.ResponseModel
 import com.example.moviemagnet.data.repository.Repository
-import com.example.moviemagnet.databinding.*
+import com.example.moviemagnet.databinding.ActivitySavedFilesBinding
 import com.example.moviemagnet.ui.adapter.SavedFileAdapter
-import com.example.moviemagnet.util.*
-import kotlinx.coroutines.*
+import com.example.moviemagnet.ui.viewmodels.MainViewModel
+import com.example.moviemagnet.util.Constants
+import com.example.moviemagnet.util.Resource
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class SavedFilesActivity : AppCompatActivity(), SavedFileAdapter.OnDeleteClickListener {
+class SavedFilesActivity : AppCompatActivity(), SavedFileAdapter.onClickListener {
     private lateinit var binding: ActivitySavedFilesBinding
     private lateinit var recyclerView: RecyclerView
     private lateinit var savedFileAdapter: SavedFileAdapter
     private lateinit var repository: Repository
+    private lateinit var mainViewModel: MainViewModel
+    private lateinit var fApp: FileApplication
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySavedFilesBinding.inflate(layoutInflater)
         val view: View = binding.root
         setContentView(view)
-        repository = Repository(SavedFileRoomDatabase(this))
-        val fileLiveData = repository.responseGetAllFile()
-        recyclerView = binding.rvSavedFile
-        fileLiveData.observe(this) {
-            if (it.isNullOrEmpty()) {
-                binding.rvSavedFile.visibility = GONE
-                binding.noSavedFile.visibility = VISIBLE
-            } else {
-                binding.rvSavedFile.visibility = VISIBLE
-                binding.noSavedFile.visibility = GONE
-                recyclerView.layoutManager = LinearLayoutManager(this)
-                savedFileAdapter = SavedFileAdapter(fileLiveData, this, this)
-                recyclerView.adapter = savedFileAdapter
+        setUpMainViewModel()
+        setUpRecyclerView()
+        mainViewModel.getAllSavedFile.observe(this@SavedFilesActivity) { savedFile ->
+            when (savedFile) {
+                is Resource.Success -> {
+                    if (savedFile.d1?.value?.isEmpty() == true) {
+                        binding.rvSavedFile.visibility = GONE
+                        binding.noSavedFile.visibility = VISIBLE
+                    } else {
+                        binding.rvSavedFile.visibility = VISIBLE
+                        binding.noSavedFile.visibility = GONE
+                        savedFileAdapter = savedFile.d1?.let { SavedFileAdapter(it, this, this) }!!
+                        recyclerView.adapter = savedFileAdapter
+                    }
+                    binding.progressBar.visibility = GONE
+                }
+
+                is Resource.Error -> {
+                    binding.rvSavedFile.visibility = GONE
+                    binding.noSavedFile.visibility = VISIBLE
+                    binding.progressBar.visibility = GONE
+                }
+
+                is Resource.Loading -> {
+                    binding.progressBar.visibility = VISIBLE
+                }
             }
-            binding.progressBar.visibility = GONE
         }
+    }
+
+    private fun setUpRecyclerView() {
+        recyclerView = binding.rvSavedFile
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        mainViewModel.getAllSavedFile()
+    }
+
+    private fun setUpMainViewModel() {
+        fApp = application as FileApplication
+        repository = fApp.sRepo
+        mainViewModel = ViewModelProvider(this, MainViewModel.Companion.MainViewModelFactory(application, repository))[MainViewModel::class.java]
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -64,8 +99,7 @@ class SavedFilesActivity : AppCompatActivity(), SavedFileAdapter.OnDeleteClickLi
 
             R.id.clear_all -> {
                 Constants.deleteAllSavedFile(this@SavedFilesActivity)
-                Toast.makeText(this, "Delete all saved files successfully", Toast.LENGTH_SHORT)
-                    .show()
+                Toast.makeText(this, "Delete all saved files successfully", Toast.LENGTH_SHORT).show()
                 return true
             }
 
@@ -77,7 +111,14 @@ class SavedFilesActivity : AppCompatActivity(), SavedFileAdapter.OnDeleteClickLi
 
     override fun onDeleteClick(file: ResponseModel) {
         CoroutineScope(Dispatchers.IO).launch {
-            repository.responseDeleteFile(file)
+            repository.deleteSavedFile(file)
         }
+    }
+
+    override fun isVisible(isVisible: Boolean) {
+        val sharedPreferences = getSharedPreferences("MySharedPrefs", MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putString("keyDataToSend", "$isVisible")
+        editor.apply()
     }
 }

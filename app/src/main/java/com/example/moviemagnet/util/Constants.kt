@@ -4,8 +4,7 @@ import android.content.Context
 import android.widget.Toast
 import com.example.moviemagnet.data.db.database.HistoryDatabase
 import com.example.moviemagnet.data.db.database.SavedFileRoomDatabase
-import com.example.moviemagnet.data.db.entity.HistoryModel
-import com.example.moviemagnet.data.db.entity.ResponseModel
+import com.example.moviemagnet.model.ResponseModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -15,7 +14,7 @@ object Constants {
     const val BASE_URL = "https://filepursuit.p.rapidapi.com/"
     const val message =
         "Thanks for using our application, below is the link of the file\n\n"
-    const val folderName = "UltimateFetch"
+
 
     /*
     https://medium.com/acmvit/getting-started-with-lottie-animations-android-2c225ad2c467
@@ -58,8 +57,7 @@ object Constants {
     }*/
 
 
-
-    fun saveFile(file: ResponseModel, context: Context) = CoroutineScope(Dispatchers.IO).launch {
+    /*fun saveFile(file: ResponseModel, context: Context) = CoroutineScope(Dispatchers.IO).launch {
         SavedFileRoomDatabase.invoke(context).getFileDaa().insertFile(file)
     }
 
@@ -75,7 +73,7 @@ object Constants {
 
     fun updateFile(file: ResponseModel, context: Context) = CoroutineScope(Dispatchers.IO).launch {
         SavedFileRoomDatabase.invoke(context).getFileDaa().updateFile(file)
-    }
+    }*/
 
     fun deleteAllSavedFile(context: Context) = CoroutineScope(Dispatchers.IO).launch {
         SavedFileRoomDatabase(context).clearAllTables()

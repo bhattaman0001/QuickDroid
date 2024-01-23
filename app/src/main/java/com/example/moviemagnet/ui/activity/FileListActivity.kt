@@ -9,100 +9,50 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.*
 import androidx.appcompat.app.*
-import com.example.moviemagnet.BuildConfig
 import androidx.lifecycle.*
 import androidx.recyclerview.widget.*
 import com.example.moviemagnet.*
 import com.example.moviemagnet.api.*
-import com.example.moviemagnet.data.db.database.HistoryDatabase
-import com.example.moviemagnet.data.db.database.SavedFileRoomDatabase
-import com.example.moviemagnet.data.db.entity.HistoryModel
 import com.example.moviemagnet.data.repository.Repository
 import com.example.moviemagnet.databinding.*
 import com.example.moviemagnet.model.*
 import com.example.moviemagnet.ui.adapter.FileResponseAdapter
+import com.example.moviemagnet.ui.viewmodels.MainViewModel
 import com.example.moviemagnet.util.*
 import com.google.android.material.bottomsheet.*
 import com.google.android.material.snackbar.*
 import kotlinx.coroutines.*
-import timber.log.Timber
 
 class FileListActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityFileListBinding
-    private var typeOfSingleFileSelected: String = ""
-    private var queryName: String = ""
     private lateinit var recyclerViewFileList: RecyclerView
     private lateinit var adapter: FileResponseAdapter
     private lateinit var repository: Repository
+    private lateinit var mainViewModel: MainViewModel
+    private lateinit var qN: String // queryName
+    private lateinit var tOFS: String // typeOfFileSelected
+    private lateinit var fApp: FileApplication
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityFileListBinding.inflate(layoutInflater)
-        val view: View = binding.root
-        setContentView(view)
-        recyclerViewFileList = binding.fileListRv
-        if (intent.extras != null) {
-            queryName = intent.getStringExtra("query_name").toString()
-            typeOfSingleFileSelected =
-                intent.getStringExtra("type_of_single_file_selected").toString()
-        }
+    }
 
-        val history = HistoryModel(queryName, typeOfSingleFileSelected)
+    private fun getIntentValues() {
+        qN = intent?.getStringExtra("queryName").toString()
+        tOFS = intent?.getStringExtra("typeOfFileSelected").toString()
+    }
 
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val response = RetrofitHelper.responseApiInterface.getData(
-                    header1 = BuildConfig.header1,
-                    header2 = BuildConfig.header2,
-                    parameter1 = queryName,
-                    parameter2 = typeOfSingleFileSelected
-                )
+    private fun setUpRecyclerView() {
+        recyclerViewFileList.layoutManager = LinearLayoutManager(this@FileListActivity)
+        mainViewModel.getRequestResponse(qN, tOFS)
+    }
 
-                Timber.tag("is_this_ok").d("response -> " + response.body())
-
-                val responseTime = (response.raw().receivedResponseAtMillis - response.raw().sentRequestAtMillis).toDouble() / 1000.0
-                binding.responseTime.text =
-                    "Your request took $responseTime seconds to find and display! Thanks"
-                binding.responseTime.isAllCaps = true
-
-                Snackbar.make(view, "Response is ${response.body()?.status}", Snackbar.LENGTH_SHORT)
-                    .show()
-                if (response.isSuccessful) {
-                    val data = response.body()?.files_found
-
-                    runOnUiThread(Runnable {
-                        run {
-                            binding.shimmerFrameLayout.stopShimmer()
-                            binding.responseTime.visibility = VISIBLE
-                            binding.numberOfResults.visibility = VISIBLE
-                            binding.shimmerFrameLayout.visibility = GONE
-                            recyclerViewFileList.visibility = VISIBLE
-                        }
-                    })
-
-                    binding.numberOfResults.text = "Total results : " + data?.size.toString()
-                    binding.numberOfResults.isAllCaps = true
-                    recyclerViewFileList.layoutManager = LinearLayoutManager(this@FileListActivity)
-
-                    repository = Repository(SavedFileRoomDatabase(this@FileListActivity))
-                    adapter =
-                        FileResponseAdapter(data?.distinct(), this@FileListActivity, repository)
-
-                    // if the response is success then insert it into history db
-                    repository = Repository(HistoryDatabase(this@FileListActivity))
-                    repository.historyInsertOrUpdate(history)
-
-                    recyclerViewFileList.adapter = adapter
-                } else {
-                    binding.shimmerFrameLayout.visibility = GONE
-                    Snackbar.make(view, "The response is failed", Snackbar.LENGTH_SHORT).show()
-                }
-            } catch (e: Exception) {
-                Snackbar.make(view, "Open your Internet", Snackbar.LENGTH_LONG).show()
-                e.printStackTrace()
-            }
-        }
+    private fun setUpViewModel() {
+        fApp = application as FileApplication
+        repository = fApp.hRepo // well here you can use rRepo also
+        mainViewModel = ViewModelProvider(this, MainViewModel.Companion.MainViewModelFactory(application, repository))[MainViewModel::class.java]
     }
 
     @SuppressLint("ResourceType")
@@ -140,14 +90,83 @@ class FileListActivity : AppCompatActivity() {
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+    }
+
     override fun onResume() {
         super.onResume()
-        binding.shimmerFrameLayout.startShimmer()
+        binding = ActivityFileListBinding.inflate(layoutInflater)
+        val view: View = binding.root
+        setContentView(view)
+        recyclerViewFileList = binding.fileListRv
+        getIntentValues()
+        setUpViewModel()
+        setUpRecyclerView()
+        val history = HistoryModel(qN, tOFS)
+        try {
+            mainViewModel.responseLiveData.observe(this@FileListActivity) { response ->
+                when (response) {
+                    is Resource.Success -> {
+                        binding.responseTime.text =
+                            "Your request took ${response.d2} seconds to find and display! Thanks"
+                        binding.responseTime.isAllCaps = true
+                        runOnUiThread(Runnable {
+                            run {
+                                binding.shimmerFrameLayout.stopShimmer()
+                                binding.responseTime.visibility = VISIBLE
+                                binding.numberOfResults.visibility = VISIBLE
+                                binding.shimmerFrameLayout.visibility = GONE
+                                recyclerViewFileList.visibility = VISIBLE
+                            }
+                        })
+                        binding.numberOfResults.text = "Total results : " + response.d3
+                        binding.numberOfResults.isAllCaps = true
+
+                        repository = fApp.sRepo
+                        // adapter is getting initialized
+                        adapter = FileResponseAdapter(response.d1?.files_found, this@FileListActivity, repository)
+
+                        // if the response is success then insert it into history db
+                        repository = fApp.hRepo
+                        CoroutineScope(Dispatchers.IO).launch { repository.historyInsertOrUpdate(history) }
+
+                        // set the adapter to RV
+                        recyclerViewFileList.adapter = adapter
+                    }
+
+                    is Resource.Error -> {
+                        binding.shimmerFrameLayout.visibility = GONE
+                        response.message.let {
+                            Snackbar.make(view, "The response is failed", Snackbar.LENGTH_SHORT).show()
+                        }
+                    }
+
+                    is Resource.Loading -> {
+                        binding.shimmerFrameLayout.visibility = VISIBLE
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            Snackbar.make(view, "Open your Internet", Snackbar.LENGTH_LONG).show()
+            e.printStackTrace()
+        }
     }
 
     override fun onPause() {
         binding.shimmerFrameLayout.stopShimmer()
         super.onPause()
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        val sharedPreferences = getSharedPreferences("MySharedPrefs", MODE_PRIVATE)
+        val receivedData: Boolean = sharedPreferences.getString("keyDataToSend", "Default Value").toBoolean()
+        adapter.setButtonVisibility(receivedData)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

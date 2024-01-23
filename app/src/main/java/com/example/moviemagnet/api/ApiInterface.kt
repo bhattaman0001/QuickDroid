@@ -5,7 +5,7 @@ import com.example.moviemagnet.model.*
 import retrofit2.*
 import retrofit2.http.*
 
-interface ResponseApiInterface {
+interface ApiInterface {
     @GET("/")
     suspend fun getData(
         @Header("X-RapidAPI-Key") header1: String,

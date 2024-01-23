@@ -2,9 +2,7 @@ package com.example.moviemagnet.data.db.dao
 
 import androidx.lifecycle.*
 import androidx.room.*
-import com.example.moviemagnet.data.db.entity.ResponseModel
-import com.example.moviemagnet.model.*
-import kotlin.coroutines.*
+import com.example.moviemagnet.model.ResponseModel
 
 @Dao
 interface ResponseDao {

@@ -3,17 +3,17 @@ package com.example.moviemagnet.ui.adapter
 import android.annotation.*
 import android.content.*
 import android.net.*
+import android.util.Log
 import android.view.*
-import android.view.View.GONE
 import android.widget.*
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.*
 import com.example.moviemagnet.*
-import com.example.moviemagnet.data.db.entity.ResponseModel
+import com.example.moviemagnet.model.ResponseModel
 import com.example.moviemagnet.data.repository.Repository
 import com.example.moviemagnet.databinding.*
 import com.example.moviemagnet.util.*
 import kotlinx.coroutines.*
-
 
 class FileResponseAdapter(
     private val data: List<ResponseModel>?,
@@ -23,6 +23,11 @@ class FileResponseAdapter(
     RecyclerView.Adapter<FileResponseAdapter.ViewHolder>() {
 
     private lateinit var binding: FileItemBinding
+    private var isVisibleB = false
+
+    fun setButtonVisibility(isVisible: Boolean){
+        this.isVisibleB = isVisible
+    }
 
     inner class ViewHolder(private val binding: FileItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -43,13 +48,12 @@ class FileResponseAdapter(
             binding.numberId.text = "${position + 1}"
             binding.saveYourFile.setOnClickListener {
                 CoroutineScope(Dispatchers.IO).launch {
-                    response?.let { it1 -> repository.responseInsertOrUpdate(it1) }
+                    response?.let { it1 -> repository.insertOrUpdateSavedFiles(it1) }
                 }
-                binding.saveYourFile.text = "Saved"
                 binding.saveYourFile.background.setTint(context.resources.getColor(android.R.color.holo_green_light))
                 binding.saveYourFile.setTextColor(context.resources.getColor(R.color.black))
                 Constants.showInsertToast(context)
-                binding.saveYourFile.isEnabled = false
+                binding.saveYourFile.isEnabled = isVisibleB
             }
             binding.shareFile.setOnClickListener {
                 Intent(Intent.ACTION_SEND).apply {

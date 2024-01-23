@@ -33,7 +33,6 @@ class DownloadedMediaActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("aman-demo", "clickedDMB3")
         binding = ActivityDownloadedMediaBinding.inflate(layoutInflater)
         val view: View = binding.root
         setContentView(view)
@@ -62,12 +61,10 @@ class DownloadedMediaActivity : AppCompatActivity() {
     }
 
     private fun getDownloadedVideos(): LiveData<List<Video>> {
-        Log.d("aman-demo", "clickedDMB4")
         val videosLiveData = MutableLiveData<List<Video>>()
         val videos: MutableList<Video> = mutableListOf()
         val downloadsFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
         val files: Array<File> = downloadsFolder.listFiles()!!
-
         files.let {
             for (file in it) {
                 if (isFile(file.extension)) {
@@ -79,7 +76,6 @@ class DownloadedMediaActivity : AppCompatActivity() {
                 }
             }
         }
-
         videosLiveData.value = videos
         return videosLiveData
     }
