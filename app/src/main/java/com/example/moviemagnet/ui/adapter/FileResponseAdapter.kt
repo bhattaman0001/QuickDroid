@@ -54,6 +54,7 @@ class FileResponseAdapter(
                 binding.saveYourFile.setTextColor(context.resources.getColor(R.color.black))
                 Constants.showInsertToast(context)
                 binding.saveYourFile.isEnabled = isVisibleB
+                binding.saveYourFile.text = "Item Saved"
             }
             binding.shareFile.setOnClickListener {
                 Intent(Intent.ACTION_SEND).apply {

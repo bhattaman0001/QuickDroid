@@ -34,7 +34,6 @@ class FileListActivity : AppCompatActivity() {
     private lateinit var tOFS: String // typeOfFileSelected
     private lateinit var fApp: FileApplication
 
-    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -90,10 +89,6 @@ class FileListActivity : AppCompatActivity() {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-    }
-
     override fun onResume() {
         super.onResume()
         binding = ActivityFileListBinding.inflate(layoutInflater)
@@ -114,13 +109,13 @@ class FileListActivity : AppCompatActivity() {
                         runOnUiThread(Runnable {
                             run {
                                 binding.shimmerFrameLayout.stopShimmer()
+                                binding.shimmerFrameLayout.visibility = GONE
                                 binding.responseTime.visibility = VISIBLE
                                 binding.numberOfResults.visibility = VISIBLE
-                                binding.shimmerFrameLayout.visibility = GONE
                                 recyclerViewFileList.visibility = VISIBLE
                             }
                         })
-                        binding.numberOfResults.text = "Total results : " + response.d3
+                        binding.numberOfResults.text = "Total results: ${response.d3}"
                         binding.numberOfResults.isAllCaps = true
 
                         repository = fApp.sRepo
@@ -143,7 +138,6 @@ class FileListActivity : AppCompatActivity() {
                     }
 
                     is Resource.Loading -> {
-                        binding.shimmerFrameLayout.visibility = VISIBLE
                     }
                 }
             }
@@ -160,13 +154,10 @@ class FileListActivity : AppCompatActivity() {
 
     override fun onRestart() {
         super.onRestart()
+        binding.shimmerFrameLayout.stopShimmer()
         val sharedPreferences = getSharedPreferences("MySharedPrefs", MODE_PRIVATE)
         val receivedData: Boolean = sharedPreferences.getString("keyDataToSend", "Default Value").toBoolean()
         adapter.setButtonVisibility(receivedData)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
