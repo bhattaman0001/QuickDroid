@@ -5,8 +5,9 @@
         <item>Select file type</item>
         <item>Video</item>
         <item>E-books</item>
+        <item>Pdf</item>
         <item>Audio</item>
-        <item>Mobile Apps</item>
+        <item>Apks</item>
         <item>Archives</item>
     </string-array>
 

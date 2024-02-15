@@ -11,11 +11,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.moviemagnet'
+    namespace 'com.example.quickdroid'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.moviemagnet"
+        applicationId "com.example.quickdroid"
         minSdk 24
         targetSdk 31
         versionCode 1
@@ -25,8 +25,10 @@ android {
 
         Properties properties = new Properties()
         properties.load(project.rootProject.file("local.properties").newDataInputStream())
-        buildConfigField "String", "header1", "\"${properties.getProperty("header1")}\""
-        buildConfigField "String", "header2", "\"${properties.getProperty("header2")}\""
+        buildConfigField "String", "header1FP", "\"${properties.getProperty("header1FP")}\""
+        buildConfigField "String", "header2FP", "\"${properties.getProperty("header2FP")}\""
+        buildConfigField "String", "header1EB", "\"${properties.getProperty("header1EB")}\""
+        buildConfigField "String", "header2EB", "\"${properties.getProperty("header2EB")}\""
     }
 
     buildTypes {
@@ -70,6 +72,9 @@ dependencies {
 
     // LiveData
     implementation "androidx.lifecycle:lifecycle-livedata:2.6.1"
+
+    //fragment
+    implementation("androidx.fragment:fragment-ktx:1.6.2")
 
     // Room
     implementation 'androidx.room:room-runtime:2.5.2'
@@ -119,6 +124,9 @@ dependencies {
 
     // shimmer effect
     implementation 'com.facebook.shimmer:shimmer:0.5.0@aar'
+
+    // khttp
+    implementation "com.github.jkcclemens:khttp:0.1.0"
 
     // Pluto
     debugImplementation 'com.plutolib.plugins:bundle-core:2.1.3'
